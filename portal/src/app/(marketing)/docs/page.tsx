@@ -39,7 +39,7 @@ const guides = [
     description: "Two ways to put a trained chatbot in front of visitors.",
     steps: [
       "Script tag: paste the snippet from a bot's Widget tab for a floating chat bubble.",
-      "Full-page chat: link directly to /chat/{botId} for a standalone ChatGPT-style interface.",
+      "Full-page chat: link directly to /chat?id={botId} for a standalone ChatGPT-style interface.",
       "Both respect any allowed-domains restriction you've set on the widget.",
     ],
   },

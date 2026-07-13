@@ -84,7 +84,7 @@ export default function DashboardPage() {
               {bots.slice(0, 5).map((bot) => (
                 <Link
                   key={bot.id}
-                  href={`/bots/${bot.id}`}
+                  href={`/bots/detail?id=${bot.id}`}
                   className="flex items-center justify-between rounded-xl border border-border p-4 transition-colors hover:border-border-strong hover:bg-muted/50"
                 >
                   <div className="flex items-center gap-3">

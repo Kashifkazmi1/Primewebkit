@@ -1,13 +1,23 @@
 "use client";
 
 import { Bot, Send } from "lucide-react";
-import { use, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ApiError } from "@/lib/api/client";
 import { getFingerprint, getSessionId, widgetApi, type WidgetBotConfig, type WidgetMessage } from "@/lib/api/widget";
 
-export default function PublicChatPage({ params }: { params: Promise<{ uuid: string }> }) {
-  const { uuid } = use(params);
+export default function PublicChatPage() {
+  return (
+    <Suspense fallback={null}>
+      <PublicChatContent />
+    </Suspense>
+  );
+}
+
+function PublicChatContent() {
+  const searchParams = useSearchParams();
+  const uuid = searchParams.get("id") ?? "";
   const [bot, setBot] = useState<WidgetBotConfig | null>(null);
   const [messages, setMessages] = useState<WidgetMessage[]>([]);
   const [input, setInput] = useState("");
@@ -16,6 +26,10 @@ export default function PublicChatPage({ params }: { params: Promise<{ uuid: str
   const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!uuid) {
+      setError("This chat link is missing its chatbot id.");
+      return;
+    }
     widgetApi
       .config(uuid)
       .then((res) => {

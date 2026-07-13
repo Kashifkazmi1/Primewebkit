@@ -1,19 +1,35 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { CheckCircle2, Loader2, XCircle } from "lucide-react";
 import { ApiError } from "@/lib/api/client";
 import { authApi } from "@/lib/api/endpoints";
 
 type Status = "verifying" | "success" | "error";
 
-export default function VerifyEmailPage({ params }: { params: Promise<{ token: string }> }) {
-  const { token } = use(params);
+export default function VerifyEmailPage() {
+  return (
+    <Suspense fallback={null}>
+      <VerifyEmailContent />
+    </Suspense>
+  );
+}
+
+function VerifyEmailContent() {
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token") ?? "";
   const [status, setStatus] = useState<Status>("verifying");
   const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
+    if (!token) {
+      setStatus("error");
+      setMessage("This verification link is missing its token.");
+      return;
+    }
+
     let cancelled = false;
     authApi
       .verifyEmail(token)

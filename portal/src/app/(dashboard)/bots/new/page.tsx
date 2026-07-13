@@ -33,7 +33,7 @@ export default function NewBotPage() {
     try {
       const bot = await botsApi.create(values);
       toast.success("Chatbot created — now add some knowledge sources.");
-      router.push(`/bots/${bot.id}`);
+      router.push(`/bots/detail?id=${bot.id}`);
     } catch (error) {
       toast.error(error instanceof ApiError ? error.message : "Could not create the chatbot.");
     }

@@ -1,7 +1,8 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -21,11 +22,21 @@ const statusVariant: Record<Bot["status"], "success" | "warning" | "neutral"> = 
   archived: "neutral",
 };
 
-export default function BotDetailPage({ params }: { params: Promise<{ uuid: string }> }) {
-  const { uuid } = use(params);
+export default function BotDetailPage() {
+  return (
+    <Suspense fallback={null}>
+      <BotDetailContent />
+    </Suspense>
+  );
+}
+
+function BotDetailContent() {
+  const searchParams = useSearchParams();
+  const uuid = searchParams.get("id") ?? "";
   const [bot, setBot] = useState<Bot | null>(null);
 
   useEffect(() => {
+    if (!uuid) return;
     botsApi.get(uuid).then(setBot).catch(() => setBot(null));
   }, [uuid]);
 

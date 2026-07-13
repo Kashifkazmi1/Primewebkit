@@ -3,6 +3,8 @@ import { blogPosts } from "@/lib/content/blog";
 import { faqs } from "@/lib/content/faqs";
 import { pricingPlans } from "@/lib/content/pricing";
 
+export const dynamic = "force-static";
+
 export function GET() {
   const pricing = pricingPlans
     .map((plan) => `- ${plan.name}: $${plan.price}/mo — ${plan.tagline}. Includes: ${plan.features.join(", ")}.`)
@@ -20,7 +22,7 @@ PrimeWebKit is a multi-tenant AI chatbot SaaS. Accounts crawl a website, upload 
 or write Q&A pairs to build a chatbot's knowledge base. Visitor questions are answered via
 retrieval-augmented generation (relevant chunks retrieved, then passed to Google Gemini for
 generation), with streaming responses over Server-Sent Events. Chatbots embed via a script
-tag (floating widget) or a full-page chat interface at /chat/{botId}.
+tag (floating widget) or a full-page chat interface at /chat?id={botId}.
 
 ## Pricing
 

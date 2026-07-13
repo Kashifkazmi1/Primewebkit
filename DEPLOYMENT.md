@@ -89,6 +89,35 @@ curl https://yourdomain.com/api/v1/health
 
 Then work through `docs/PRODUCTION_CHECKLIST.md`'s "Final smoke test."
 
+### 10. Frontend (`portal/`) — no Node.js needed
+
+Shared hosting plans (Hostinger's Business plan included) don't run a
+persistent Node.js process, so the frontend can't run as a live Next.js
+server here. It doesn't need to — `next.config.ts` builds it as a
+**static export**: plain HTML/CSS/JS files, served the same way any
+static site would be.
+
+**Build it somewhere with Node** (your own machine, or a CI runner —
+not this hosting account):
+```bash
+cd portal
+cp .env.example .env.local
+nano .env.local   # set NEXT_PUBLIC_API_URL to https://api.yourdomain.com/api/v1, etc.
+npm install
+npm run build     # writes the static site to portal/out/
+```
+
+**Upload only the *contents* of `portal/out/`** (not the folder
+itself) to the document root for your frontend domain — e.g. via
+SFTP/FTP, or `scp -P 65002 -r out/* u123456789@yourdomain.com:public_html/`
+over SSH. That's the entire deploy: no `npm install` on the server, no
+process to start or keep running, no PHP involved for this domain at
+all. `portal/out/.htaccess` (included in the build output) handles
+security headers and pretty-URL routing automatically.
+
+To update the live site after a change: rebuild locally, re-upload
+`portal/out/`'s contents, done.
+
 ---
 
 ## VPS Deployment
@@ -196,8 +225,10 @@ server {
 location block — without it, nginx buffers the entire SSE response
 before forwarding it, defeating streaming entirely.
 
-**Frontend — `primewebkit.com`** (new — a plain reverse proxy to a
-long-lived Next.js process, no PHP involved):
+**Frontend — `primewebkit.com`**. The frontend (`portal/`) builds to a
+**static export** (`next.config.ts` sets `output: "export"`) — plain
+HTML/CSS/JS with no Node.js process required to serve it, same as any
+other static site:
 
 ```nginx
 server {
@@ -209,20 +240,17 @@ server {
 server {
     listen 443 ssl http2;
     server_name primewebkit.com;
+    root /var/www/primewebkit-portal/out;
+    index index.html;
 
     ssl_certificate     /etc/letsencrypt/live/primewebkit.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/primewebkit.com/privkey.pem;
 
     location / {
-        proxy_pass http://127.0.0.1:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
+        try_files $uri $uri.html $uri/ =404;
     }
+
+    error_page 404 /404.html;
 }
 ```
 
@@ -230,24 +258,25 @@ Both subdomains need their own TLS certificate — `certbot --nginx -d
 primewebkit.com -d api.primewebkit.com` in one call will issue both if
 they're on the same server, or run certbot separately per host if not.
 
-**Running the frontend process** (from `portal/`, wherever it's
-hosted — can be the same server as the backend, or a completely
-different one, since it only talks to the backend over HTTPS):
+**Building and deploying the frontend**: build it wherever's
+convenient (your own machine, a CI runner, or this VPS) — it doesn't
+need to build on the machine that serves it:
 ```bash
-npm ci && npm run build
-pm2 start npm --name primewebkit-portal -- start
-pm2 save
+cd portal
+npm ci
+npm run build       # writes the static site to portal/out/
 ```
+Upload the contents of `portal/out/` to `/var/www/primewebkit-portal/out`
+(rsync, scp, or your CI's deploy step) — no `npm start`, no process
+manager, nothing to keep running for the frontend.
 
-**Where the frontend can live**: because it's a fully separate origin
-that only calls the backend's public HTTPS API, `portal/` can be
-deployed anywhere that runs Node — this same VPS, a different VPS, or
-a platform like Vercel/Render. It does *not* need to share a server
-with the PHP backend the way a single-domain, path-routed setup would.
-The one thing that **can't** run it is classic PHP-only shared
-hosting (no persistent Node process) — the app uses server-rendered
-route handlers (`sitemap.xml`, `robots.txt`, `llms.txt`, the generated
-OG image) that need a live Node runtime, not just static files.
+**Where the frontend can live**: since it's fully static and only
+calls the backend's public HTTPS API from the browser, `out/` can be
+hosted absolutely anywhere that serves static files — this same VPS,
+plain shared hosting (see the Hostinger section above), or a CDN/host
+like Cloudflare Pages or Netlify. It does not need a Node.js runtime
+in production at all; Node is only used locally to run `npm run
+build`.
 
 ### 6. SSL via Let's Encrypt
 

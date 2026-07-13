@@ -28,6 +28,8 @@ const staticRoutes = [
   { path: "/register", priority: 0.4, changeFrequency: "yearly" as const },
 ];
 
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date().toISOString();
 

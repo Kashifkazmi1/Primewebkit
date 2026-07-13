@@ -60,13 +60,13 @@ export function BotWidgetTab({ botUuid }: { botUuid: string }) {
           <CardDescription>Share a direct link or embed as an iframe.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
-          <div className="rounded-xl border border-border bg-muted p-3 font-mono text-xs">
-            {env.siteUrl}/chat/{botUuid}
+          <div className="rounded-xl border border-border bg-muted p-3 font-mono text-xs break-all">
+            {env.siteUrl}/chat?id={botUuid}
           </div>
           <Button
             variant="outline"
             size="sm"
-            onClick={() => window.open(`${env.siteUrl}/chat/${botUuid}`, "_blank", "noopener,noreferrer")}
+            onClick={() => window.open(`${env.siteUrl}/chat?id=${botUuid}`, "_blank", "noopener,noreferrer")}
           >
             Open full-page chat
           </Button>

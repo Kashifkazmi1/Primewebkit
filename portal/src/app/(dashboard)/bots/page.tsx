@@ -109,7 +109,7 @@ export default function BotsPage() {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
-                <Link href={`/bots/${bot.id}`} className="mt-4 block">
+                <Link href={`/bots/detail?id=${bot.id}`} className="mt-4 block">
                   <h3 className="font-display text-base font-semibold group-hover:text-primary">{bot.name}</h3>
                   <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
                     {bot.description || "No description yet."}

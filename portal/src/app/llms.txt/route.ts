@@ -1,5 +1,7 @@
 import { env } from "@/lib/env";
 
+export const dynamic = "force-static";
+
 export function GET() {
   const body = `# PrimeWebKit
 
@@ -12,7 +14,7 @@ export function GET() {
 
 - Install: a single script tag (\`${env.widgetUrl}\`) adds a floating chat bubble
   to any website (WordPress, Shopify, Webflow, custom HTML).
-- Every bot also has a full-page, ChatGPT-style chat interface at /chat/{botId}.
+- Every bot also has a full-page, ChatGPT-style chat interface at /chat?id={botId}.
 - Features: knowledge base from websites/documents/FAQs, streaming answers, lead capture
   (name/email/phone), conversation transcripts, analytics (top questions, response times,
   ratings, lead conversion), webhooks, team roles, API keys, white-label options,

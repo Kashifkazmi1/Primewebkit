@@ -302,7 +302,10 @@ final class AuthService
         // API and renders a result), matching the pattern already used by
         // the password-reset email below — not the raw API endpoint, which
         // would show the visitor unstyled JSON instead of a confirmation.
-        $verificationUrl = rtrim((string) config('app.url'), '/') . '/verify-email/' . $rawToken;
+        // Query string, not a path segment — the frontend is a static
+        // export with no server-side route matching, so its dynamic pages
+        // read an id/token from ?query instead of a [param] path segment.
+        $verificationUrl = rtrim((string) config('app.url'), '/') . '/verify-email?token=' . $rawToken;
 
         $this->mail->sendEmailVerification($email, $name, $verificationUrl);
     }
