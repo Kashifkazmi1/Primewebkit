@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bot, type LucideIcon } from "lucide-react";
+import { MessageCircle, type LucideIcon } from "lucide-react";
 import { adminNavItem, navItems } from "@/lib/nav-config";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth/auth-context";
@@ -42,7 +42,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
     <div className="flex h-full flex-col gap-6 p-4">
       <Link href="/dashboard" className="flex items-center gap-2 px-2 py-1 font-display text-lg font-semibold">
         <span className="flex size-8 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-          <Bot className="size-4.5" />
+          <MessageCircle className="size-4.5" />
         </span>
         PrimeWebKit
       </Link>

@@ -1,7 +1,7 @@
 "use client";
 
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { Bot, ChevronDown, Menu, X } from "lucide-react";
+import { MessageCircle, ChevronDown, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -44,7 +44,7 @@ export function SiteHeader() {
       <div className="container-page flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center gap-2 font-display text-lg font-semibold">
           <span className="flex size-8 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-            <Bot className="size-4.5" />
+            <MessageCircle className="size-4.5" />
           </span>
           PrimeWebKit
         </Link>

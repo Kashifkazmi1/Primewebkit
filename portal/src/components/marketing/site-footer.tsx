@@ -1,4 +1,4 @@
-import { Bot } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { GithubMark, LinkedinMark, XMark } from "@/components/icons/brand-icons";
 
@@ -52,7 +52,7 @@ export function SiteFooter() {
         <div className="sm:col-span-2 lg:col-span-2">
           <Link href="/" className="flex items-center gap-2 font-display text-lg font-semibold">
             <span className="flex size-8 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-              <Bot className="size-4.5" />
+              <MessageCircle className="size-4.5" />
             </span>
             PrimeWebKit
           </Link>

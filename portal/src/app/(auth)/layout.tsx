@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Bot, Sparkles } from "lucide-react";
+import { MessageCircle, Sparkles } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
@@ -9,7 +9,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 font-display text-lg font-semibold">
             <span className="flex size-8 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-              <Bot className="size-4.5" />
+              <MessageCircle className="size-4.5" />
             </span>
             PrimeWebKit
           </Link>
