@@ -1,0 +1,253 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.16 0.02 265);
+  --surface: oklch(0.99 0.002 265);
+  --surface-2: oklch(0.97 0.004 265);
+  --border: oklch(0.91 0.006 265);
+  --border-strong: oklch(0.85 0.008 265);
+  --muted: oklch(0.97 0.004 265);
+  --muted-foreground: oklch(0.47 0.015 265);
+
+  --primary: oklch(0.55 0.19 264);
+  --primary-foreground: oklch(0.99 0 0);
+  --primary-hover: oklch(0.5 0.2 264);
+
+  --accent: oklch(0.7 0.16 300);
+  --accent-foreground: oklch(0.99 0 0);
+
+  --success: oklch(0.6 0.16 155);
+  --warning: oklch(0.75 0.16 80);
+  --danger: oklch(0.58 0.22 25);
+  --danger-foreground: oklch(0.99 0 0);
+
+  --ring: oklch(0.55 0.19 264 / 0.5);
+
+  --radius: 0.75rem;
+
+  --shadow-color: 265 20% 40%;
+  --shadow-sm: 0 1px 2px hsl(var(--shadow-color) / 0.06);
+  --shadow-md: 0 4px 16px -4px hsl(var(--shadow-color) / 0.12), 0 2px 6px -2px hsl(var(--shadow-color) / 0.08);
+  --shadow-lg: 0 24px 48px -12px hsl(var(--shadow-color) / 0.18), 0 8px 24px -8px hsl(var(--shadow-color) / 0.12);
+  --shadow-glow: 0 0 0 1px hsl(var(--shadow-color) / 0.05), 0 8px 40px -8px oklch(0.55 0.19 264 / 0.35);
+}
+
+.dark {
+  --background: oklch(0.14 0.014 265);
+  --foreground: oklch(0.96 0.004 265);
+  --surface: oklch(0.17 0.015 265);
+  --surface-2: oklch(0.2 0.016 265);
+  --border: oklch(0.28 0.016 265);
+  --border-strong: oklch(0.35 0.018 265);
+  --muted: oklch(0.22 0.016 265);
+  --muted-foreground: oklch(0.65 0.016 265);
+
+  --primary: oklch(0.72 0.16 264);
+  --primary-foreground: oklch(0.14 0.02 265);
+  --primary-hover: oklch(0.78 0.15 264);
+
+  --accent: oklch(0.75 0.15 300);
+  --accent-foreground: oklch(0.14 0.02 265);
+
+  --success: oklch(0.7 0.17 155);
+  --warning: oklch(0.8 0.16 85);
+  --danger: oklch(0.68 0.2 25);
+  --danger-foreground: oklch(0.14 0.02 265);
+
+  --ring: oklch(0.72 0.16 264 / 0.5);
+
+  --shadow-color: 240 60% 2%;
+  --shadow-glow: 0 0 0 1px hsl(var(--shadow-color) / 0.4), 0 8px 40px -8px oklch(0.72 0.16 264 / 0.25);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 0.35rem);
+  --radius-md: calc(var(--radius) - 0.15rem);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 0.35rem);
+  --radius-2xl: calc(var(--radius) + 0.75rem);
+
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-sora);
+  --font-mono: var(--font-jetbrains-mono);
+
+  --animate-fade-up: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-fade-in: fade-in 0.5s ease both;
+  --animate-scale-in: scale-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-marquee: marquee 32s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.2s linear infinite;
+
+  --breakpoint-xs: 30rem;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+    outline-color: var(--color-ring);
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font-feature-settings: "cv11", "ss01";
+  }
+  ::selection {
+    background: var(--color-primary);
+    color: var(--color-primary-foreground);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer utilities {
+  .container-page {
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 40rem) {
+    .container-page {
+      padding-inline: 2rem;
+    }
+  }
+
+  .text-gradient {
+    background: linear-gradient(120deg, var(--color-primary), var(--color-accent) 60%, oklch(0.72 0.18 200));
+    background-clip: text;
+    color: transparent;
+  }
+
+  .bg-grid {
+    background-image: linear-gradient(to right, var(--color-border) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--color-border) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  .bg-radial-fade {
+    -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 0%, #000 40%, transparent 100%);
+    mask-image: radial-gradient(ellipse 60% 50% at 50% 0%, #000 40%, transparent 100%);
+  }
+
+  .glass {
+    background: color-mix(in oklch, var(--color-surface) 72%, transparent);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+  }
+
+  .shadow-elevated {
+    box-shadow: var(--shadow-md);
+  }
+  .shadow-floating {
+    box-shadow: var(--shadow-lg);
+  }
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .shimmer-text {
+    background: linear-gradient(
+      100deg,
+      var(--color-muted-foreground) 40%,
+      var(--color-foreground) 50%,
+      var(--color-muted-foreground) 60%
+    );
+    background-size: 200% 100%;
+    background-clip: text;
+    color: transparent;
+    animation: var(--animate-shimmer);
+  }
+}

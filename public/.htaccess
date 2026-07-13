@@ -1,0 +1,48 @@
+RewriteEngine On
+
+# Block the TRACE/TRACK HTTP methods (cross-site tracing / XST attacks
+# use these to read cookies/headers a browser would otherwise hide
+# from JavaScript). This app is a stateless JSON API with nothing
+# meaningful in a TRACE response, so there's no legitimate use case
+# to preserve.
+RewriteCond %{REQUEST_METHOD} ^(TRACE|TRACK)$ [NC]
+RewriteRule .* - [F,L]
+
+# Redirect Authorization header (Bearer token) to PHP - required on many
+# Apache/FastCGI/Hostinger setups where the header is stripped otherwise.
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# Force HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# If the request is not for a real file or directory, route it through
+# the front controller.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [L]
+
+# Never allow direct access to dotfiles (.env, .git, etc.)
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+# Never serve log files even if one is ever accidentally placed here.
+<FilesMatch "\.log$">
+    Require all denied
+</FilesMatch>
+
+# Disable directory listing
+Options -Indexes
+
+# Fallback security headers at the web-server level, in case a
+# malformed request or fatal error occurs before PHP's own
+# SecurityHeadersMiddleware runs. PHP's headers (set per-response,
+# tailored per content type) take precedence when both fire; this is
+# a safety net, not the primary mechanism.
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "DENY"
+    Header always set Referrer-Policy "no-referrer"
+</IfModule>

@@ -1,0 +1,15 @@
+/vendor/
+/.env
+/composer.lock
+/storage/Logs/*.log
+/storage/Uploads/*
+!/storage/Uploads/.gitkeep
+/storage/KnowledgeBase/*
+!/storage/KnowledgeBase/.gitkeep
+/storage/Cache/*
+!/storage/Cache/.gitkeep
+.DS_Store
+.idea/
+.vscode/
+*.cache
+.phpunit.result.cache
