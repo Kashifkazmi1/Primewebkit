@@ -141,16 +141,63 @@ sudo chmod -R 775 storage/
 
 ### 5. Configure nginx
 
-`primewebkit.com` serves **two applications behind one domain**: the
-Next.js frontend (`portal/`) at the root, and this PHP backend under
-`/api/`. That means nginx routes by path prefix instead of pointing
-`root` straight at `public/` — the backend is no longer the only thing
-on the domain.
+The frontend (`portal/`) and this backend are **two separate
+applications on two separate subdomains** — `primewebkit.com` for the
+Next.js frontend, `api.primewebkit.com` for this PHP API — not one
+domain split by path. That means two independent, ordinary nginx
+server blocks; neither needs to know about the other.
 
-Run the frontend as its own long-lived Node process (`next start`,
-supervised by `pm2` or a `systemd` unit) listening on an internal port
-(`127.0.0.1:3000` below), and proxy everything nginx doesn't recognize
-as an API path to it:
+**Backend — `api.primewebkit.com`** (this is the existing config,
+unchanged apart from `server_name`):
+
+```nginx
+server {
+    listen 80;
+    server_name api.primewebkit.com;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name api.primewebkit.com;
+    root /var/www/ai-chatbot-saas/public;
+    index index.php;
+
+    ssl_certificate     /etc/letsencrypt/live/api.primewebkit.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/api.primewebkit.com/privkey.pem;
+
+    location /api/v1/widget/ {
+        proxy_buffering off;
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_read_timeout 60;
+    }
+
+    location ~ /\. {
+        deny all;
+    }
+
+    location ~ ^/(app|bootstrap|config|database|routes|storage|vendor|docs|tests)/ {
+        deny all;
+    }
+}
+```
+
+**Critical for streaming**: `proxy_buffering off` on the widget
+location block — without it, nginx buffers the entire SSE response
+before forwarding it, defeating streaming entirely.
+
+**Frontend — `primewebkit.com`** (new — a plain reverse proxy to a
+long-lived Next.js process, no PHP involved):
 
 ```nginx
 server {
@@ -166,34 +213,6 @@ server {
     ssl_certificate     /etc/letsencrypt/live/primewebkit.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/primewebkit.com/privkey.pem;
 
-    # --- PHP backend: API, widget script, and the front controller ---
-    location /api/v1/widget/ {
-        proxy_buffering off;
-        root /var/www/ai-chatbot-saas/public;
-        try_files $uri $uri/ /index.php?$query_string;
-    }
-
-    location ~ ^/(api|widget\.js|chat\.html)($|/) {
-        root /var/www/ai-chatbot-saas/public;
-        try_files $uri $uri/ /index.php?$query_string;
-    }
-
-    location ~ \.php$ {
-        include snippets/fastcgi-php.conf;
-        fastcgi_pass unix:/run/php/php8.3-fpm.sock;
-        fastcgi_param SCRIPT_FILENAME /var/www/ai-chatbot-saas/public$fastcgi_script_name;
-        fastcgi_read_timeout 60;
-    }
-
-    location ~ /\. {
-        deny all;
-    }
-
-    location ~ ^/(app|bootstrap|config|database|routes|storage|vendor|docs|tests)/ {
-        deny all;
-    }
-
-    # --- Next.js frontend: everything else ---
     location / {
         proxy_pass http://127.0.0.1:3000;
         proxy_http_version 1.1;
@@ -207,28 +226,28 @@ server {
 }
 ```
 
-**Critical for streaming**: `proxy_buffering off` on the widget
-location block — without it, nginx buffers the entire SSE response
-before forwarding it, defeating streaming entirely.
+Both subdomains need their own TLS certificate — `certbot --nginx -d
+primewebkit.com -d api.primewebkit.com` in one call will issue both if
+they're on the same server, or run certbot separately per host if not.
 
-**Running the frontend process** (from `portal/`):
+**Running the frontend process** (from `portal/`, wherever it's
+hosted — can be the same server as the backend, or a completely
+different one, since it only talks to the backend over HTTPS):
 ```bash
 npm ci && npm run build
 pm2 start npm --name primewebkit-portal -- start
 pm2 save
 ```
 
-**Shared hosting note**: classic PHP-only shared hosting (no
-persistent Node.js process) can run the backend but **cannot** run
-this Next.js frontend as-is — it uses server-rendered route handlers
-(`sitemap.xml`, `robots.txt`, `llms.txt`, the generated OG image) that
-need a live Node runtime, not just static files. If you must stay on
-PHP-only shared hosting, either host the frontend separately on a
-Node-capable platform (a VPS, or a host like Vercel/Render) and proxy
-`/api/*` from there to this backend's existing shared-hosting URL, or
-convert `portal/` to `output: "export"` and drop the dynamic route
-handlers in favor of static equivalents. For most launches, a small
-VPS running both processes (as configured above) is simplest.
+**Where the frontend can live**: because it's a fully separate origin
+that only calls the backend's public HTTPS API, `portal/` can be
+deployed anywhere that runs Node — this same VPS, a different VPS, or
+a platform like Vercel/Render. It does *not* need to share a server
+with the PHP backend the way a single-domain, path-routed setup would.
+The one thing that **can't** run it is classic PHP-only shared
+hosting (no persistent Node process) — the app uses server-rendered
+route handlers (`sitemap.xml`, `robots.txt`, `llms.txt`, the generated
+OG image) that need a live Node runtime, not just static files.
 
 ### 6. SSL via Let's Encrypt
 

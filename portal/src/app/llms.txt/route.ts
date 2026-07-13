@@ -10,7 +10,7 @@ export function GET() {
 
 ## Key facts
 
-- Install: a single script tag (\`${env.siteUrl}/widget.js\`) adds a floating chat bubble
+- Install: a single script tag (\`${env.widgetUrl}\`) adds a floating chat bubble
   to any website (WordPress, Shopify, Webflow, custom HTML).
 - Every bot also has a full-page, ChatGPT-style chat interface at /chat/{botId}.
 - Features: knowledge base from websites/documents/FAQs, streaming answers, lead capture
