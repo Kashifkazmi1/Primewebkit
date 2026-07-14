@@ -8,6 +8,7 @@ use App\Core\Http\Request;
 use App\Core\Http\Response;
 use App\Core\Routing\Router;
 use App\Exceptions\Handler;
+use App\Middlewares\CorsMiddleware;
 use Throwable;
 
 /**
@@ -49,7 +50,10 @@ final class Application
         try {
             return $this->router->dispatch($request);
         } catch (Throwable $e) {
-            return $this->exceptionHandler->handle($e);
+            $response = $this->exceptionHandler->handle($e);
+            CorsMiddleware::applyHeaders($request, $response);
+
+            return $response;
         }
     }
 }
