@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Reveal } from "@/components/marketing/reveal";
 import { env } from "@/lib/env";
 
-const SNIPPET = `<script src="${env.widgetUrl}"\n  data-bot-id="your-bot-id"\n  async></script>`;
+const SNIPPET = `<script src="${env.widgetUrl}"\n  data-bot-id="${env.demoBotId}"\n  async></script>`;
 
 export function InstallBand() {
   const [copied, setCopied] = useState(false);
@@ -51,6 +51,10 @@ export function InstallBand() {
               <code>{SNIPPET}</code>
             </pre>
           </div>
+          <p className="mt-4 text-center text-sm text-white/50">
+            This isn&apos;t a mockup — it&apos;s the real widget, running live on this page right now. Look for the chat
+            bubble in the corner.
+          </p>
         </Reveal>
       </div>
     </section>

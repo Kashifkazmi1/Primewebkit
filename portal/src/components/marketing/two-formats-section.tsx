@@ -3,9 +3,10 @@
 import { Check, Copy, MessageCircle, PanelsTopLeft } from "lucide-react";
 import { useState } from "react";
 import { Reveal } from "@/components/marketing/reveal";
+import { env } from "@/lib/env";
 
 const IFRAME_SNIPPET = `<iframe
-  src="https://api.primewebkit.com/chat.html?bot=your-bot-id"
+  src="${env.chatHtmlUrl}?bot=${env.demoBotId}"
   style="width:100%;height:600px;border:0;border-radius:12px"
   allow="clipboard-write"
   title="Chat with us">

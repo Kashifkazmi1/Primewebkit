@@ -1,6 +1,11 @@
 import { MessageCircle } from "lucide-react";
 import Link from "next/link";
-import { GithubMark, LinkedinMark, XMark } from "@/components/icons/brand-icons";
+import { FacebookMark, InstagramMark, LinkedinMark } from "@/components/icons/brand-icons";
+
+const socialLinks = [
+  { href: "https://www.facebook.com/people/Prime-Webkit/61578131876843/", label: "PrimeWebKit on Facebook", Icon: FacebookMark },
+  { href: "https://www.linkedin.com/company/prime-webkit", label: "PrimeWebKit on LinkedIn", Icon: LinkedinMark },
+];
 
 const columns = [
   {
@@ -60,15 +65,18 @@ export function SiteFooter() {
             AI chatbots trained on your own content — crawl your site, upload docs, and go live in minutes.
           </p>
           <div className="mt-5 flex items-center gap-3 text-muted-foreground">
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="PrimeWebKit on X" className="hover:text-foreground">
-              <XMark className="size-4" />
-            </a>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="PrimeWebKit on GitHub" className="hover:text-foreground">
-              <GithubMark className="size-4.5" />
-            </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="PrimeWebKit on LinkedIn" className="hover:text-foreground">
-              <LinkedinMark className="size-4.5" />
-            </a>
+            {socialLinks.map(({ href, label, Icon }) => (
+              <a key={href} href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className="hover:text-foreground">
+                <Icon className="size-4.5" />
+              </a>
+            ))}
+            <span
+              aria-disabled="true"
+              title="Instagram — coming soon"
+              className="cursor-not-allowed opacity-40"
+            >
+              <InstagramMark className="size-4.5" />
+            </span>
           </div>
         </div>
         {columns.map((column) => (

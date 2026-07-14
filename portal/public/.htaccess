@@ -12,14 +12,36 @@
   </If>
 </IfModule>
 
-# Pretty URLs: Next's static export writes each route as
-# <route>/index.html — serve that file when a visitor requests the
-# folder without "/index.html" on the end, and don't force a redirect
-# that would strip a trailing slash Next itself doesn't add.
+# Every route has a same-named directory sitting next to its .html file
+# (see below), which makes mod_dir think "/dashboard" is a directory
+# reference and auto-redirect to "/dashboard/" *before* mod_rewrite below
+# ever runs — bypassing the .html rewrite entirely. Turn that off; the
+# rewrite rules are the only URL normalization we want happening.
+<IfModule mod_dir.c>
+  DirectorySlash Off
+</IfModule>
+
+# Pretty URLs: Turbopack's static export writes each route as a flat
+# <route>.html file, but *also* creates a same-named <route>/ folder
+# holding internal RSC prefetch payloads (not a browsable page). Serve
+# the .html file whenever it exists — deliberately not excluding
+# same-named directories, since every real route has one of those
+# internal folders sitting right next to it, and excluding them (an
+# earlier version of this rule did) makes Apache try to list/serve
+# that folder instead and return 403 on every route but "/".
 <IfModule mod_rewrite.c>
   RewriteEngine On
+
+  # This build doesn't use trailing slashes (next.config.ts has no
+  # trailingSlash: true), so a URL like "/blog/" would otherwise fall
+  # through to Apache's directory handling for the internal RSC-payload
+  # folder above and 403. Drop the trailing slash first so it lands on
+  # the same rule as "/blog".
+  RewriteCond %{REQUEST_URI} !^/$
+  RewriteCond %{REQUEST_URI} ^(.+)/$
+  RewriteRule ^ %1 [L,R=301]
+
   RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME}.html -f
   RewriteRule ^(.*)$ $1.html [L]
 </IfModule>

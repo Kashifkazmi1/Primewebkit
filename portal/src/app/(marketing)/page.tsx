@@ -6,6 +6,7 @@ import { FeaturesGrid } from "@/components/marketing/features-grid";
 import { Hero } from "@/components/marketing/hero";
 import { InstallBand } from "@/components/marketing/install-band";
 import { IntegrationsSection } from "@/components/marketing/integrations-section";
+import { LiveChatDemoSection } from "@/components/marketing/live-chat-demo-section";
 import { LogosMarquee } from "@/components/marketing/logos-marquee";
 import { PricingPreview } from "@/components/marketing/pricing-preview";
 import { Testimonials } from "@/components/marketing/testimonials";
@@ -29,6 +30,7 @@ export default function HomePage() {
       <InstallBand />
       <LogosMarquee />
       <FeaturesGrid />
+      <LiveChatDemoSection />
       <WorkflowShowcase />
       <DashboardPreviewSection />
       <TwoFormatsSection />

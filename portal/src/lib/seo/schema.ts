@@ -8,7 +8,10 @@ export const organizationSchema = {
   name: "PrimeWebKit",
   url: env.siteUrl,
   logo: `${env.siteUrl}/logo.png`,
-  sameAs: ["https://twitter.com/primewebkit", "https://github.com/primewebkit", "https://linkedin.com/company/primewebkit"],
+  sameAs: [
+    "https://www.facebook.com/people/Prime-Webkit/61578131876843/",
+    "https://www.linkedin.com/company/prime-webkit",
+  ],
 };
 
 export const softwareApplicationSchema = {
