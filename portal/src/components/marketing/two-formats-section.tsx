@@ -24,7 +24,7 @@ export function TwoFormatsSection() {
   return (
     <section className="container-page py-24">
       <div className="grid items-center gap-12 lg:grid-cols-2">
-        <Reveal>
+        <Reveal className="min-w-0">
           <p className="text-sm font-semibold uppercase tracking-widest text-primary">Two ways to deploy</p>
           <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight sm:text-4xl">
             Floating bubble, or a full page — your choice
@@ -62,8 +62,8 @@ export function TwoFormatsSection() {
           </div>
         </Reveal>
 
-        <Reveal delay={0.1}>
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#0f1729] shadow-glow">
+        <Reveal delay={0.1} className="min-w-0">
+          <div className="min-w-0 overflow-hidden rounded-2xl border border-white/10 bg-[#0f1729] shadow-glow">
             <div className="flex items-center justify-between border-b border-white/10 px-4 py-2.5">
               <div className="flex gap-1.5">
                 <span className="size-2.5 rounded-full bg-white/20" />

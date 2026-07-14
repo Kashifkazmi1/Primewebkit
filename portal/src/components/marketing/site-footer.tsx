@@ -24,6 +24,7 @@ const columns = [
     links: [
       { href: "/docs", label: "Documentation" },
       { href: "/api", label: "API reference" },
+      { href: "/guides", label: "Guides" },
       { href: "/blog", label: "Blog" },
       { href: "/help", label: "Help center" },
       { href: "/changelog", label: "Changelog" },

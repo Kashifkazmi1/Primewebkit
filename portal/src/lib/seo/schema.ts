@@ -44,6 +44,24 @@ export const faqSchema = {
   })),
 };
 
+export function articleSchema(post: { title: string; excerpt: string; date: string; slug: string }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.date,
+    dateModified: post.date,
+    author: { "@type": "Organization", name: "PrimeWebKit" },
+    publisher: {
+      "@type": "Organization",
+      name: "PrimeWebKit",
+      logo: { "@type": "ImageObject", url: `${env.siteUrl}/logo.png` },
+    },
+    mainEntityOfPage: { "@type": "WebPage", "@id": `${env.siteUrl}/blog/${post.slug}` },
+  };
+}
+
 export function breadcrumbSchema(items: { name: string; url: string }[]) {
   return {
     "@context": "https://schema.org",
