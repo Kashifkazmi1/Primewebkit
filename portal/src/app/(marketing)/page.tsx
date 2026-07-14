@@ -4,10 +4,12 @@ import { DashboardPreviewSection } from "@/components/marketing/dashboard-previe
 import { FaqSection } from "@/components/marketing/faq-section";
 import { FeaturesGrid } from "@/components/marketing/features-grid";
 import { Hero } from "@/components/marketing/hero";
+import { InstallBand } from "@/components/marketing/install-band";
 import { IntegrationsSection } from "@/components/marketing/integrations-section";
 import { LogosMarquee } from "@/components/marketing/logos-marquee";
 import { PricingPreview } from "@/components/marketing/pricing-preview";
 import { Testimonials } from "@/components/marketing/testimonials";
+import { TwoFormatsSection } from "@/components/marketing/two-formats-section";
 import { WorkflowShowcase } from "@/components/marketing/workflow-showcase";
 import { JsonLd } from "@/components/seo/json-ld";
 import { organizationSchema, softwareApplicationSchema, faqSchema } from "@/lib/seo/schema";
@@ -24,10 +26,12 @@ export default function HomePage() {
     <>
       <JsonLd data={[organizationSchema, softwareApplicationSchema, faqSchema]} />
       <Hero />
+      <InstallBand />
       <LogosMarquee />
       <FeaturesGrid />
       <WorkflowShowcase />
       <DashboardPreviewSection />
+      <TwoFormatsSection />
       <IntegrationsSection />
       <Testimonials />
       <PricingPreview />

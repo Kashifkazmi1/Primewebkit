@@ -76,10 +76,27 @@ export interface CreateBotInput {
 export interface KnowledgeSource {
   id: string;
   type: "text" | "qa" | "website" | "document";
-  title: string;
-  status: string;
-  size_kb: number | null;
+  source_name: string;
+  source_url: string | null;
+  status: "pending" | "processing" | "crawling" | "ready" | "failed" | (string & {});
+  character_count: number | null;
+  chunk_count: number | null;
+  error_message: string | null;
+  processed_at: string | null;
   created_at: string;
+}
+
+export interface Widget {
+  id: string;
+  theme: "light" | "dark";
+  position: "bottom-right" | "bottom-left";
+  primary_color: string | null;
+  greeting_message: string | null;
+  placeholder_text: string | null;
+  show_branding: boolean;
+  custom_css: string | null;
+  allowed_domains: string[];
+  is_active: boolean;
 }
 
 export interface Conversation {
@@ -210,6 +227,25 @@ export interface NotificationItem {
   body: string | null;
   read_at: string | null;
   created_at: string;
+}
+
+export interface AnalyticsSeriesPoint {
+  bucket: string;
+  total: number;
+}
+
+export interface BotAnalytics {
+  conversations_by_period: AnalyticsSeriesPoint[];
+  messages_by_period: AnalyticsSeriesPoint[];
+  leads_by_period: AnalyticsSeriesPoint[];
+  averages: {
+    response_time_ms: number;
+    tokens_per_message: number;
+    cost_per_message: number;
+  };
+  most_asked_questions: { question: string; total: number }[];
+  lead_conversion_rate: number;
+  average_rating: number;
 }
 
 export interface UsageSummary {

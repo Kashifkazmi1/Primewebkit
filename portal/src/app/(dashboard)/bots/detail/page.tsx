@@ -7,6 +7,7 @@ import { ArrowLeft } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BotAnalyticsTab } from "@/components/bots/bot-analytics-tab";
 import { BotConversationsTab } from "@/components/bots/bot-conversations-tab";
 import { BotKnowledgeTab } from "@/components/bots/bot-knowledge-tab";
 import { BotLeadsTab } from "@/components/bots/bot-leads-tab";
@@ -67,6 +68,7 @@ function BotDetailContent() {
           <TabsTrigger value="widget">Widget &amp; embed</TabsTrigger>
           <TabsTrigger value="conversations">Conversations</TabsTrigger>
           <TabsTrigger value="leads">Leads</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
         </TabsList>
         <TabsContent value="settings">{bot && <BotSettingsTab bot={bot} onUpdated={setBot} />}</TabsContent>
         <TabsContent value="knowledge">
@@ -80,6 +82,9 @@ function BotDetailContent() {
         </TabsContent>
         <TabsContent value="leads">
           <BotLeadsTab botUuid={uuid} />
+        </TabsContent>
+        <TabsContent value="analytics">
+          <BotAnalyticsTab botUuid={uuid} />
         </TabsContent>
       </Tabs>
     </div>
