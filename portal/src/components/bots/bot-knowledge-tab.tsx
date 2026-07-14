@@ -1,7 +1,7 @@
 "use client";
 
-import { FileText, Globe, MessageSquareText, Plus, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { FileText, Globe, MessageSquareText, Plus, RefreshCw, Trash2, Upload } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -26,9 +26,20 @@ import { formatDate } from "@/lib/utils";
 
 const typeIcon = { text: FileText, qa: MessageSquareText, website: Globe, document: FileText } as const;
 
+const IN_PROGRESS_STATUSES = new Set(["pending", "processing", "crawling"]);
+
+const badgeVariant = (status: string): "success" | "warning" | "danger" | "neutral" => {
+  if (status === "ready") return "success";
+  if (status === "failed") return "danger";
+  if (IN_PROGRESS_STATUSES.has(status)) return "warning";
+  return "neutral";
+};
+
 export function BotKnowledgeTab({ botUuid }: { botUuid: string }) {
   const [sources, setSources] = useState<KnowledgeSource[] | null>(null);
   const [open, setOpen] = useState(false);
+  const [reindexing, setReindexing] = useState(false);
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   async function load() {
     try {
@@ -40,7 +51,22 @@ export function BotKnowledgeTab({ botUuid }: { botUuid: string }) {
 
   useEffect(() => {
     load();
+    return () => {
+      if (pollRef.current) clearInterval(pollRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [botUuid]);
+
+  useEffect(() => {
+    const hasInFlight = sources?.some((s) => IN_PROGRESS_STATUSES.has(s.status)) ?? false;
+    if (hasInFlight && !pollRef.current) {
+      pollRef.current = setInterval(load, 5000);
+    } else if (!hasInFlight && pollRef.current) {
+      clearInterval(pollRef.current);
+      pollRef.current = null;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sources]);
 
   async function handleRemove(sourceUuid: string) {
     try {
@@ -51,6 +77,19 @@ export function BotKnowledgeTab({ botUuid }: { botUuid: string }) {
     }
   }
 
+  async function handleReembed() {
+    setReindexing(true);
+    try {
+      await botsApi.reembed(botUuid);
+      toast.success("Re-indexing started — this can take a few minutes.");
+      load();
+    } catch (error) {
+      toast.error(error instanceof ApiError ? error.message : "Could not start re-indexing.");
+    } finally {
+      setReindexing(false);
+    }
+  }
+
   return (
     <Card>
       <CardHeader className="flex-row items-center justify-between space-y-0">
@@ -58,15 +97,20 @@ export function BotKnowledgeTab({ botUuid }: { botUuid: string }) {
           <CardTitle>Knowledge base</CardTitle>
           <CardDescription>Website pages, documents, and Q&amp;A pairs this chatbot answers from.</CardDescription>
         </div>
-        <AddSourceDialog
-          open={open}
-          onOpenChange={setOpen}
-          botUuid={botUuid}
-          onAdded={(source) => {
-            setSources((prev) => (prev ? [source, ...prev] : [source]));
-            setOpen(false);
-          }}
-        />
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" isLoading={reindexing} onClick={handleReembed}>
+            <RefreshCw className="size-4" /> Re-index all
+          </Button>
+          <AddSourceDialog
+            open={open}
+            onOpenChange={setOpen}
+            botUuid={botUuid}
+            onAdded={(source) => {
+              setSources((prev) => (prev ? [source, ...prev] : [source]));
+              setOpen(false);
+            }}
+          />
+        </div>
       </CardHeader>
       <CardContent>
         {sources === null ? (
@@ -91,12 +135,18 @@ export function BotKnowledgeTab({ botUuid }: { botUuid: string }) {
                       <Icon className="size-4" />
                     </span>
                     <div>
-                      <p className="text-sm font-medium">{source.title}</p>
-                      <p className="text-xs text-muted-foreground">Added {formatDate(source.created_at)}</p>
+                      <p className="text-sm font-medium">{source.source_name}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {source.status === "failed" && source.error_message
+                          ? source.error_message
+                          : `Added ${formatDate(source.created_at)}${
+                              source.chunk_count != null ? ` · ${source.chunk_count} chunks` : ""
+                            }`}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <Badge variant={source.status === "ready" ? "success" : "warning"}>{source.status}</Badge>
+                    <Badge variant={badgeVariant(source.status)}>{source.status}</Badge>
                     <Button variant="ghost" size="icon" aria-label="Remove source" onClick={() => handleRemove(source.id)}>
                       <Trash2 className="size-4" />
                     </Button>
@@ -123,11 +173,14 @@ function AddSourceDialog({
   onAdded: (source: KnowledgeSource) => void;
 }) {
   const [submitting, setSubmitting] = useState(false);
-  const [textTitle, setTextTitle] = useState("");
+  const [textName, setTextName] = useState("");
   const [textContent, setTextContent] = useState("");
   const [qaQuestion, setQaQuestion] = useState("");
   const [qaAnswer, setQaAnswer] = useState("");
   const [websiteUrl, setWebsiteUrl] = useState("");
+  const [maxPages, setMaxPages] = useState("20");
+  const [file, setFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   async function submit(fn: () => Promise<KnowledgeSource>) {
     setSubmitting(true);
@@ -152,12 +205,15 @@ function AddSourceDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add knowledge source</DialogTitle>
-          <DialogDescription>Website pages, raw text, or Q&amp;A pairs your chatbot can answer from.</DialogDescription>
+          <DialogDescription>Website pages, documents, raw text, or Q&amp;A pairs your chatbot can answer from.</DialogDescription>
         </DialogHeader>
         <Tabs defaultValue="website">
           <TabsList className="w-full">
             <TabsTrigger value="website" className="flex-1">
               Website
+            </TabsTrigger>
+            <TabsTrigger value="document" className="flex-1">
+              Document
             </TabsTrigger>
             <TabsTrigger value="text" className="flex-1">
               Text
@@ -171,20 +227,68 @@ function AddSourceDialog({
               <Label htmlFor="website-url">Website URL</Label>
               <Input id="website-url" placeholder="https://example.com" value={websiteUrl} onChange={(e) => setWebsiteUrl(e.target.value)} />
             </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="max-pages">Max pages to crawl</Label>
+              <Input
+                id="max-pages"
+                type="number"
+                min={1}
+                max={100}
+                value={maxPages}
+                onChange={(e) => setMaxPages(e.target.value)}
+              />
+            </div>
             <DialogFooter>
               <Button
                 disabled={!websiteUrl}
                 isLoading={submitting}
-                onClick={() => submit(() => botsApi.addWebsite(botUuid, { url: websiteUrl }))}
+                onClick={() =>
+                  submit(() =>
+                    botsApi.addWebsite(botUuid, {
+                      start_url: websiteUrl,
+                      max_pages: maxPages ? Number(maxPages) : undefined,
+                    }),
+                  )
+                }
               >
                 Crawl website
               </Button>
             </DialogFooter>
           </TabsContent>
+          <TabsContent value="document" className="space-y-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="document-file">File</Label>
+              <input
+                ref={fileInputRef}
+                id="document-file"
+                type="file"
+                accept=".pdf,.docx,.txt,.md,.csv"
+                className="hidden"
+                onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+              />
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
+              >
+                <Upload className="size-4" />
+                {file ? file.name : "Choose a PDF, DOCX, TXT, MD, or CSV file (max 20MB)"}
+              </button>
+            </div>
+            <DialogFooter>
+              <Button
+                disabled={!file}
+                isLoading={submitting}
+                onClick={() => file && submit(() => botsApi.addDocument(botUuid, file))}
+              >
+                Upload document
+              </Button>
+            </DialogFooter>
+          </TabsContent>
           <TabsContent value="text" className="space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="text-title">Title</Label>
-              <Input id="text-title" value={textTitle} onChange={(e) => setTextTitle(e.target.value)} />
+              <Label htmlFor="text-name">Name</Label>
+              <Input id="text-name" value={textName} onChange={(e) => setTextName(e.target.value)} />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="text-content">Content</Label>
@@ -192,9 +296,9 @@ function AddSourceDialog({
             </div>
             <DialogFooter>
               <Button
-                disabled={!textTitle || !textContent}
+                disabled={!textName || !textContent}
                 isLoading={submitting}
-                onClick={() => submit(() => botsApi.addText(botUuid, { title: textTitle, content: textContent }))}
+                onClick={() => submit(() => botsApi.addText(botUuid, { source_name: textName, content: textContent }))}
               >
                 Add text
               </Button>

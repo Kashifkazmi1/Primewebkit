@@ -18,4 +18,12 @@ export const env = {
     process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
     "1044212666179-nmo21qhhgr7hc4n8sdm34ccsgs5sdo84.apps.googleusercontent.com",
   ),
+  // PrimeWebKit's own live demo bot — used on the marketing site to
+  // show the real widget/iframe in action, not a mockup.
+  demoBotId: required("NEXT_PUBLIC_DEMO_BOT_ID", process.env.NEXT_PUBLIC_DEMO_BOT_ID, "fc133138-73e8-4e8c-b47d-354ca491a462"),
+  chatHtmlUrl: required(
+    "NEXT_PUBLIC_CHAT_HTML_URL",
+    process.env.NEXT_PUBLIC_CHAT_HTML_URL,
+    "https://api.primewebkit.com/chat.html",
+  ),
 };

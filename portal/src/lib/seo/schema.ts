@@ -8,7 +8,10 @@ export const organizationSchema = {
   name: "PrimeWebKit",
   url: env.siteUrl,
   logo: `${env.siteUrl}/logo.png`,
-  sameAs: ["https://twitter.com/primewebkit", "https://github.com/primewebkit", "https://linkedin.com/company/primewebkit"],
+  sameAs: [
+    "https://www.facebook.com/people/Prime-Webkit/61578131876843/",
+    "https://www.linkedin.com/company/prime-webkit",
+  ],
 };
 
 export const softwareApplicationSchema = {
@@ -40,6 +43,24 @@ export const faqSchema = {
     acceptedAnswer: { "@type": "Answer", text: faq.answer },
   })),
 };
+
+export function articleSchema(post: { title: string; excerpt: string; date: string; slug: string }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.date,
+    dateModified: post.date,
+    author: { "@type": "Organization", name: "PrimeWebKit" },
+    publisher: {
+      "@type": "Organization",
+      name: "PrimeWebKit",
+      logo: { "@type": "ImageObject", url: `${env.siteUrl}/logo.png` },
+    },
+    mainEntityOfPage: { "@type": "WebPage", "@id": `${env.siteUrl}/blog/${post.slug}` },
+  };
+}
 
 export function breadcrumbSchema(items: { name: string; url: string }[]) {
   return {

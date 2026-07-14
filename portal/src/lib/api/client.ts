@@ -156,6 +156,30 @@ export async function apiFetch<T>(path: string, options: RequestOptions = {}): P
   return json.data;
 }
 
+export async function apiUpload<T>(path: string, formData: FormData): Promise<T> {
+  const headers: Record<string, string> = { Accept: "application/json" };
+  if (accessToken) headers.Authorization = `Bearer ${accessToken}`;
+
+  const res = await fetch(buildUrl(path), { method: "POST", headers, body: formData });
+
+  let json: ApiEnvelope<T>;
+  try {
+    json = (await res.json()) as ApiEnvelope<T>;
+  } catch {
+    throw new ApiError("The server returned an unexpected response. Please try again.", res.status);
+  }
+
+  if (!res.ok || !json.success) {
+    if (res.status === 401) {
+      const refreshed = await refreshAccessToken();
+      if (refreshed) return apiUpload<T>(path, formData);
+    }
+    throw new ApiError(json.message ?? "Request failed.", json.status ?? res.status, json.errors as Record<string, string[]>);
+  }
+
+  return json.data;
+}
+
 export function apiFetchPaginated<T>(
   path: string,
   options: RequestOptions = {},

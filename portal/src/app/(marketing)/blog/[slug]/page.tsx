@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { LegalContent } from "@/components/marketing/legal-content";
 import { PageHeader } from "@/components/marketing/page-header";
+import { RichText } from "@/components/marketing/rich-text";
 import { JsonLd } from "@/components/seo/json-ld";
-import { breadcrumbSchema } from "@/lib/seo/schema";
+import { articleSchema, breadcrumbSchema } from "@/lib/seo/schema";
 import { blogPosts } from "@/lib/content/blog";
 import { formatDate } from "@/lib/utils";
 
@@ -31,15 +32,20 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   return (
     <>
       <JsonLd
-        data={breadcrumbSchema([
-          { name: "Blog", url: "/blog" },
-          { name: post.title, url: `/blog/${post.slug}` },
-        ])}
+        data={[
+          breadcrumbSchema([
+            { name: "Blog", url: "/blog" },
+            { name: post.title, url: `/blog/${post.slug}` },
+          ]),
+          articleSchema(post),
+        ]}
       />
       <PageHeader eyebrow={`${formatDate(post.date)} · ${post.readingTime}`} title={post.title} />
       <LegalContent>
         {post.body.map((paragraph, index) => (
-          <p key={index}>{paragraph}</p>
+          <p key={index}>
+            <RichText text={paragraph} />
+          </p>
         ))}
       </LegalContent>
     </>

@@ -18,6 +18,34 @@ final class CorsMiddleware implements MiddlewareInterface
 {
     public function handle(Request $request, Closure $next, string ...$params): Response
     {
+        if ($request->method() === 'OPTIONS') {
+            $response = JsonResponse::success(null, 'Preflight OK', 204);
+        } else {
+            $response = $next($request);
+        }
+
+        self::applyHeaders($request, $response);
+
+        return $response;
+    }
+
+    /**
+     * Attaches CORS headers to a response for the given request.
+     *
+     * Called both from handle() above for the normal pipeline, and
+     * directly from Application::handle()'s exception-handling branch.
+     * A thrown exception (AuthenticationException from a bad password
+     * or an expired/invalid token, a ValidationException, literally
+     * anything raised via `throw`) never reaches the `$next($request)`
+     * call above — it propagates straight past this middleware to the
+     * top-level catch in Application::handle(). Without applying these
+     * same headers there too, every error response would come back
+     * with no CORS headers at all, which browsers report as "blocked
+     * by CORS policy" — masking the real status code and message
+     * behind what looks like a origin-configuration problem.
+     */
+    public static function applyHeaders(Request $request, Response $response): void
+    {
         $allowedOrigins = (array) config('cors.allowed_origins', []);
         $origin = (string) $request->header('origin', '');
 
@@ -34,12 +62,6 @@ final class CorsMiddleware implements MiddlewareInterface
         $matchedExplicitOrigin = in_array($origin, $allowedOrigins, true);
         $matchedWildcard = in_array('*', $allowedOrigins, true) || $isPublicWidgetRoute;
         $originAllowed = $matchedExplicitOrigin || $matchedWildcard;
-
-        if ($request->method() === 'OPTIONS') {
-            $response = JsonResponse::success(null, 'Preflight OK', 204);
-        } else {
-            $response = $next($request);
-        }
 
         if ($originAllowed && $origin !== '') {
             $response->setHeader('Access-Control-Allow-Origin', $origin);
@@ -61,7 +83,5 @@ final class CorsMiddleware implements MiddlewareInterface
         if ($matchedExplicitOrigin && !$isPublicWidgetRoute && (bool) config('cors.allow_credentials', false)) {
             $response->setHeader('Access-Control-Allow-Credentials', 'true');
         }
-
-        return $response;
     }
 }

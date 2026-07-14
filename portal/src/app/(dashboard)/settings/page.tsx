@@ -62,7 +62,11 @@ export default function SettingsPage() {
 
   async function onPasswordSubmit(values: PasswordValues) {
     try {
-      await authApi.changePassword({ current_password: values.current_password, new_password: values.new_password });
+      await authApi.changePassword({
+        current_password: values.current_password,
+        new_password: values.new_password,
+        new_password_confirmation: values.new_password_confirmation,
+      });
       passwordForm.reset();
       toast.success("Password changed.");
     } catch (error) {
