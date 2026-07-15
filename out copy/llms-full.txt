@@ -1,0 +1,79 @@
+# PrimeWebKit — full reference
+
+## What it is
+
+PrimeWebKit is a multi-tenant AI chatbot SaaS. Accounts crawl a website, upload documents,
+or write Q&A pairs to build a chatbot's knowledge base. Visitor questions are answered via
+retrieval-augmented generation (relevant chunks retrieved, then passed to Google Gemini for
+generation), with streaming responses over Server-Sent Events. Chatbots embed via a script
+tag (floating widget) or a full-page chat interface at /chat?id={botId}.
+
+## Pricing
+
+- Free: $0/mo — Try PrimeWebKit with no commitment. Includes: 1 chatbot, 100 messages / month, 1 knowledge source, Community support.
+- Starter: $29/mo — For small teams launching their first bot. Includes: 3 chatbots, 2,000 messages / month, Unlimited knowledge sources, Lead capture & webhooks, Email support.
+- Growth: $99/mo — For teams scaling support across products. Includes: 10 chatbots, 10,000 messages / month, Team roles & permissions, White-label branding, Priority support.
+
+## Core API (all versioned under /api/v1, JSON envelope: {status, success, message, data, errors, pagination})
+
+Authentication: POST /auth/register, /auth/login, /auth/google (Google Identity Services
+credential), /auth/refresh, /auth/logout. Bearer JWT access tokens (short-lived) plus an
+opaque, server-revocable refresh token.
+
+Chatbots: GET/POST /bots, GET/PUT/DELETE /bots/{uuid}, knowledge sources (text, Q&A,
+website crawl, document upload) under /bots/{uuid}/knowledge-sources, widget config under
+/bots/{uuid}/widget, conversations and leads under /bots/{uuid}/conversations and
+/bots/{uuid}/leads, analytics under /bots/{uuid}/analytics.
+
+Webhooks: GET /webhooks/events for supported event types (bot.created, bot.deleted,
+chat.started, chat.completed, lead.created, subscription.created, subscription.updated,
+user.created, knowledge.uploaded). GET/POST /webhooks, PUT /webhooks/{uuid} to toggle,
+DELETE to remove, GET /webhooks/{uuid}/logs for delivery history. The signing secret is
+returned exactly once, at creation.
+
+Public widget (unauthenticated, used by the embedded script): GET
+/widget/{botUuid}/config, POST /widget/{botUuid}/messages (and /messages/stream for SSE),
+POST /widget/{botUuid}/leads to capture a lead, POST
+/widget/{botUuid}/conversations/{id}/rate for visitor feedback.
+
+Billing & teams: GET /subscriptions/plans, /subscriptions/current, /subscriptions/invoices;
+POST /teams/{uuid}/invite; GET/POST /api-keys with rotation via POST /api-keys/{uuid}/rotate.
+
+## Frequently asked questions
+
+Q: How does PrimeWebKit train a chatbot on my content?
+A: You crawl your website, upload documents (PDF, DOCX, TXT, MD, CSV), or write Q&A pairs. We chunk and embed that content, then retrieve the most relevant pieces for each visitor question — retrieval-augmented generation, so answers stay grounded in your actual content.
+
+Q: Which AI model powers the chatbot?
+A: PrimeWebKit uses Google Gemini for both chat generation and embeddings, with streaming responses.
+
+Q: Can I use my own domain and remove PrimeWebKit branding?
+A: Yes — white-label options are available on paid plans, including custom colors and removing our branding.
+
+Q: How do webhooks work?
+A: Register an endpoint URL and choose which events to receive — new leads, completed chats, subscription changes, and more. Each delivery is signed so you can verify it came from PrimeWebKit.
+
+Q: Is there a free plan?
+A: Yes, a free plan is available with no credit card required. Paid plans add volume, more bots, and white-label features.
+
+Q: Can I invite my team?
+A: Yes — invite teammates with owner, manager, or member roles to collaborate on shared chatbots.
+
+## Blog
+
+- Why retrieval-augmented chatbots reduce support tickets more than scripted ones (2026-06-02): Scripted decision-tree bots break the moment a customer phrases a question differently. Here's why grounding answers in your actual content changes that. — https://primewebkit.com/blog/reduce-support-tickets-with-rag-chatbots
+- Capturing leads from chat without turning the conversation into a form (2026-05-14): The best-converting chatbots ask for contact details after they've already been useful, not before. — https://primewebkit.com/blog/chatbot-lead-capture-without-annoying-visitors
+- Webhooks vs. polling: how to actually wire up chatbot events (2026-04-22): If your integration checks the API every few minutes for new leads, you're doing more work for a worse result. Here's the alternative. — https://primewebkit.com/blog/webhooks-vs-polling-for-chatbot-integrations
+
+## Security
+
+JWT authentication with account lockout after repeated failed logins, parameterized SQL
+throughout, SSRF protection (with redirect-hop re-validation) on website crawling and
+outgoing webhooks, rate limiting with a stricter cost-aware limit on AI-generating
+endpoints, prompt-injection screening on retrieved knowledge-base content, and CORS with
+credentialed responses only for explicit origin matches. Full detail: https://primewebkit.com/security.
+
+## Contact
+
+General: hello@primewebkit.com
+Security disclosures: security@primewebkit.com

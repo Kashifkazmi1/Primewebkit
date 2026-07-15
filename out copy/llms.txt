@@ -1,0 +1,43 @@
+# PrimeWebKit
+
+> PrimeWebKit is a SaaS platform for building AI chatbots trained on a business's own
+> content. Users crawl their website, upload documents (PDF, DOCX, TXT, MD, CSV), or add
+> Q&A pairs; the chatbot answers website visitors from that knowledge using
+> retrieval-augmented generation with Google Gemini models, with streaming responses.
+
+## Key facts
+
+- Install: a single script tag (`https://api.primewebkit.com/widget.js`) adds a floating chat bubble
+  to any website (WordPress, Shopify, Webflow, custom HTML).
+- Every bot also has a full-page, ChatGPT-style chat interface at /chat?id={botId}.
+- Features: knowledge base from websites/documents/FAQs, streaming answers, lead capture
+  (name/email/phone), conversation transcripts, analytics (top questions, response times,
+  ratings, lead conversion), webhooks, team roles, API keys, white-label options,
+  per-widget domain allow-listing.
+- Pricing: free plan available (no credit card); paid plans add volume, more bots, and
+  white-label features. See https://primewebkit.com/pricing.
+- Sign-in: email/password or Google.
+
+## Pages
+
+- Home: https://primewebkit.com/
+- Features: https://primewebkit.com/features
+- Pricing: https://primewebkit.com/pricing
+- Documentation: https://primewebkit.com/docs
+- API reference: https://primewebkit.com/api
+- Use cases: https://primewebkit.com/use-cases
+- Industries: https://primewebkit.com/industries
+- Templates: https://primewebkit.com/templates
+- Blog: https://primewebkit.com/blog
+- Security: https://primewebkit.com/security
+- Contact: https://primewebkit.com/contact
+- Privacy: https://primewebkit.com/privacy
+- Terms: https://primewebkit.com/terms
+
+## Full detail
+
+See https://primewebkit.com/llms-full.txt for the complete API surface and page-by-page detail.
+
+## Contact
+
+hello@primewebkit.com
