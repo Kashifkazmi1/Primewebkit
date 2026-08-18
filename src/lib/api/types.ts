@@ -81,6 +81,31 @@ export interface CreateBotInput {
   lead_capture_prompt?: string;
 }
 
+export interface Widget {
+  id: string;
+  theme: "light" | "dark";
+  position: "bottom-right" | "bottom-left";
+  primary_color: string | null;
+  greeting_message: string | null;
+  placeholder_text: string;
+  show_branding: boolean;
+  custom_css: string | null;
+  allowed_domains: string[];
+  is_active: boolean;
+}
+
+export interface UpdateWidgetInput {
+  theme?: "light" | "dark";
+  position?: "bottom-right" | "bottom-left";
+  primary_color?: string;
+  greeting_message?: string;
+  placeholder_text?: string;
+  show_branding?: boolean;
+  custom_css?: string;
+  allowed_domains?: string[];
+  is_active?: boolean;
+}
+
 export interface KnowledgeSource {
   id: string;
   type: "text" | "qa" | "website" | "document";
@@ -113,7 +138,7 @@ export interface Lead {
   name: string | null;
   email: string | null;
   phone: string | null;
-  conversation_id: string;
+  conversation_id: number | null;
   metadata: { captured_via?: "conversation" | "manual"; [key: string]: unknown } | null;
   created_at: string;
 }

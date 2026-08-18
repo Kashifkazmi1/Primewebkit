@@ -6,6 +6,8 @@ export interface WidgetBotConfig {
   avatar_url: string | null;
   welcome_message: string | null;
   primary_color: string | null;
+  lead_capture_enabled: boolean;
+  lead_capture_fields: ("name" | "email" | "phone")[];
 }
 
 export interface WidgetMessage {

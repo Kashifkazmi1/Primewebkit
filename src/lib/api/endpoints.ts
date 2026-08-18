@@ -15,12 +15,14 @@ import type {
   Subscription,
   Team,
   TeamMember,
+  UpdateWidgetInput,
   UsageSummary,
   User,
   Webhook,
   WebhookEvent,
   WebhookLog,
   WebhookWithSecret,
+  Widget,
 } from "./types";
 
 export const authApi = {
@@ -66,10 +68,10 @@ export const botsApi = {
   removeKnowledgeSource: (uuid: string, sourceUuid: string) =>
     apiFetch<null>(`/bots/${uuid}/knowledge-sources/${sourceUuid}`, { method: "DELETE" }),
 
-  widget: (uuid: string) => apiFetch<Record<string, unknown>>(`/bots/${uuid}/widget`),
-  updateWidget: (uuid: string, data: Record<string, unknown>) =>
-    apiFetch<Record<string, unknown>>(`/bots/${uuid}/widget`, { method: "PUT", body: data }),
-  embedScript: (uuid: string) => apiFetch<{ script: string }>(`/bots/${uuid}/widget/embed-script`),
+  widget: (uuid: string) => apiFetch<Widget>(`/bots/${uuid}/widget`),
+  updateWidget: (uuid: string, data: UpdateWidgetInput) =>
+    apiFetch<Widget>(`/bots/${uuid}/widget`, { method: "PUT", body: data }),
+  embedScript: (uuid: string) => apiFetch<{ snippet: string }>(`/bots/${uuid}/widget/embed-script`),
 
   conversations: (uuid: string, page = 1, perPage = 20) =>
     apiFetchPaginated<Conversation[]>(`/bots/${uuid}/conversations`, { query: { page, per_page: perPage } }),
