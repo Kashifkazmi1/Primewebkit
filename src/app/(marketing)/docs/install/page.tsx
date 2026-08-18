@@ -11,7 +11,15 @@ export const metadata: Metadata = {
   alternates: { canonical: "/docs/install" },
 };
 
-const snippet = `<script src="${env.widgetUrl}" data-bot-id="<BOT_UUID>" async></script>`;
+const snippet = `<script>
+  (function () {
+    var s = document.createElement('script');
+    s.src = "${env.apiUrl}/widget/<BOT_UUID>/config";
+    s.async = true;
+    s.setAttribute('data-bot-id', "<BOT_UUID>");
+    document.body.appendChild(s);
+  })();
+</script>`;
 
 const platforms = [
   {

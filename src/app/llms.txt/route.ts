@@ -12,8 +12,9 @@ export function GET() {
 
 ## Key facts
 
-- Install: a single script tag (\`${env.widgetUrl}\`) adds a floating chat bubble
-  to any website (WordPress, Shopify, Webflow, custom HTML).
+- Install: a single script tag (generated per-bot from the dashboard's Widget tab,
+  or see ${env.siteUrl}/docs/install) adds a floating chat bubble to any website
+  (WordPress, Shopify, Webflow, custom HTML).
 - Every bot also has a full-page, ChatGPT-style chat interface at /chat?id={botId}.
 - Features: knowledge base from websites/documents/FAQs, streaming answers, lead capture
   (name/email/phone), conversation transcripts, analytics (top questions, response times,
@@ -29,6 +30,10 @@ export function GET() {
 - Features: ${env.siteUrl}/features
 - Pricing: ${env.siteUrl}/pricing
 - Documentation: ${env.siteUrl}/docs
+- Install guide: ${env.siteUrl}/docs/install
+- Lead capture guide: ${env.siteUrl}/ai-chatbot-for-lead-generation
+- Support agent guide: ${env.siteUrl}/ai-customer-support-agent
+- Embedding guide: ${env.siteUrl}/add-ai-chatbot-to-website
 - API reference: ${env.siteUrl}/api
 - Use cases: ${env.siteUrl}/use-cases
 - Industries: ${env.siteUrl}/industries

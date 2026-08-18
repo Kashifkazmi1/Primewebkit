@@ -10,7 +10,6 @@ function required(name: string, value: string | undefined, fallback?: string): s
 export const env = {
   apiUrl: required("NEXT_PUBLIC_API_URL", process.env.NEXT_PUBLIC_API_URL, "https://api.primewebkit.com/api/v1"),
   siteUrl: required("NEXT_PUBLIC_SITE_URL", process.env.NEXT_PUBLIC_SITE_URL, "https://primewebkit.com"),
-  widgetUrl: required("NEXT_PUBLIC_WIDGET_URL", process.env.NEXT_PUBLIC_WIDGET_URL, "https://api.primewebkit.com/widget.js"),
   // Same default as the backend's config/google.php — a public OAuth
   // client id, not a secret. Overridable via env var per environment.
   googleClientId: required(
