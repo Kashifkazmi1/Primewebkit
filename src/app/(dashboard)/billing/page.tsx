@@ -3,6 +3,7 @@
 import { Check, CreditCard } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { UpgradeButton } from "@/components/marketing/upgrade-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -82,15 +83,22 @@ export default function BillingPage() {
                       </li>
                     ))}
                   </ul>
-                  <Button
-                    variant={isCurrent ? "outline" : "primary"}
-                    disabled={isCurrent}
-                    isLoading={subscribing === plan.id}
-                    onClick={() => handleSubscribe(plan.id)}
-                    className="w-full"
-                  >
-                    {isCurrent ? "Current plan" : "Switch plan"}
-                  </Button>
+                  {isCurrent ? (
+                    <Button variant="outline" disabled className="w-full">
+                      Current plan
+                    </Button>
+                  ) : plan.price_monthly === 0 ? (
+                    <Button
+                      variant="primary"
+                      isLoading={subscribing === plan.id}
+                      onClick={() => handleSubscribe(plan.id)}
+                      className="w-full"
+                    >
+                      Switch to Free
+                    </Button>
+                  ) : (
+                    <UpgradeButton className="w-full">Upgrade to {plan.name}</UpgradeButton>
+                  )}
                 </CardContent>
               </Card>
             );

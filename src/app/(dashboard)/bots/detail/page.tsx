@@ -79,7 +79,7 @@ function BotDetailContent() {
           <BotConversationsTab botUuid={uuid} />
         </TabsContent>
         <TabsContent value="leads">
-          <BotLeadsTab botUuid={uuid} />
+          <BotLeadsTab botUuid={uuid} botName={bot?.name ?? "bot"} />
         </TabsContent>
       </Tabs>
     </div>

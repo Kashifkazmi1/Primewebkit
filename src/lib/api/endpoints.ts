@@ -29,7 +29,7 @@ export const authApi = {
   login: (data: { email: string; password: string }) =>
     apiFetch<AuthPayload>("/auth/login", { method: "POST", body: data, skipAuth: true }),
   google: (credential: string) =>
-    apiFetch<AuthPayload>("/auth/google", { method: "POST", body: { credential }, skipAuth: true }),
+    apiFetch<AuthPayload>("/auth/google", { method: "POST", body: { id_token: credential }, skipAuth: true }),
   logout: (refreshToken: string) => apiFetch<null>("/auth/logout", { method: "POST", body: { refresh_token: refreshToken } }),
   logoutAll: () => apiFetch<null>("/auth/logout-all", { method: "POST" }),
   forgotPassword: (email: string) =>
@@ -78,7 +78,8 @@ export const botsApi = {
   closeConversation: (uuid: string, conversationUuid: string) =>
     apiFetch<null>(`/bots/${uuid}/conversations/${conversationUuid}/close`, { method: "POST" }),
 
-  leads: (uuid: string) => apiFetch<Lead[]>(`/bots/${uuid}/leads`),
+  leads: (uuid: string, page = 1, perPage = 20) =>
+    apiFetchPaginated<Lead[]>(`/bots/${uuid}/leads`, { query: { page, per_page: perPage } }),
   usageSummary: (uuid: string) => apiFetch<UsageSummary>(`/bots/${uuid}/usage/summary`),
   analytics: (uuid: string) => apiFetch<Record<string, unknown>>(`/bots/${uuid}/analytics`),
 };

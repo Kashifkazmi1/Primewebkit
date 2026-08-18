@@ -8,6 +8,9 @@ const columns = [
     links: [
       { href: "/features", label: "Features" },
       { href: "/pricing", label: "Pricing" },
+      { href: "/ai-chatbot-for-lead-generation", label: "Lead generation" },
+      { href: "/ai-customer-support-agent", label: "Support agent" },
+      { href: "/add-ai-chatbot-to-website", label: "Add to your site" },
       { href: "/templates", label: "Templates" },
       { href: "/integrations", label: "Integrations" },
       { href: "/use-cases", label: "Use cases" },
@@ -18,6 +21,8 @@ const columns = [
     title: "Resources",
     links: [
       { href: "/docs", label: "Documentation" },
+      { href: "/docs/install", label: "Install guide" },
+      { href: "/docs/lead-capture", label: "Lead capture docs" },
       { href: "/api", label: "API reference" },
       { href: "/blog", label: "Blog" },
       { href: "/help", label: "Help center" },

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FaqSection } from "@/components/marketing/faq-section";
 import { PageHeader } from "@/components/marketing/page-header";
 import { Reveal } from "@/components/marketing/reveal";
+import { UpgradeButton } from "@/components/marketing/upgrade-button";
 import { Button } from "@/components/ui/button";
 import { pricingPlans } from "@/lib/content/pricing";
 import { cn } from "@/lib/utils";
@@ -24,6 +25,9 @@ export default function PricingPage() {
       />
 
       <section className="container-page py-20">
+        <p className="mx-auto -mt-4 mb-10 max-w-xl text-center text-sm font-medium text-primary">
+          First month free on any plan — no credit card required.
+        </p>
         <div className="grid gap-6 sm:grid-cols-3">
           {pricingPlans.map((plan, index) => (
             <Reveal key={plan.name} delay={index * 0.08}>
@@ -51,9 +55,15 @@ export default function PricingPage() {
                     </li>
                   ))}
                 </ul>
-                <Button asChild className="mt-6" variant={plan.highlighted ? "primary" : "outline"}>
-                  <Link href="/register">{plan.cta}</Link>
-                </Button>
+                {plan.price === 0 ? (
+                  <Button asChild className="mt-6" variant={plan.highlighted ? "primary" : "outline"}>
+                    <Link href="/register">{plan.cta}</Link>
+                  </Button>
+                ) : (
+                  <UpgradeButton className="mt-6 w-full" variant={plan.highlighted ? "primary" : "outline"}>
+                    {plan.cta}
+                  </UpgradeButton>
+                )}
               </div>
             </Reveal>
           ))}

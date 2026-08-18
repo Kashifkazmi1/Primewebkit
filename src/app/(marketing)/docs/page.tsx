@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHeader } from "@/components/marketing/page-header";
 import { Reveal } from "@/components/marketing/reveal";
+import { DocsShell } from "@/components/docs/docs-shell";
 
 export const metadata: Metadata = {
   title: "Documentation",
@@ -64,7 +65,7 @@ export default function DocsPage() {
         title="Everything you need to build with PrimeWebKit"
         description="Practical guides for the dashboard, the embed script, and the API."
       />
-      <section className="container-page py-20">
+      <DocsShell active="/docs">
         <div className="grid gap-4 sm:grid-cols-2">
           {guides.map((guide, index) => (
             <Reveal key={guide.title} delay={index * 0.05}>
@@ -88,14 +89,14 @@ export default function DocsPage() {
             </Reveal>
           ))}
         </div>
-        <Reveal delay={0.2} className="mx-auto mt-12 flex max-w-xl items-center justify-center gap-2 rounded-2xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
+        <Reveal delay={0.2} className="mx-auto flex max-w-xl items-center justify-center gap-2 rounded-2xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
           <BookOpen className="size-4 shrink-0" />
           Looking for full endpoint details?{" "}
           <Link href="/api" className="font-medium text-primary hover:underline">
             View the API reference
           </Link>
         </Reveal>
-      </section>
+      </DocsShell>
     </>
   );
 }

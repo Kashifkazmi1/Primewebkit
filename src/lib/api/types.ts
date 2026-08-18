@@ -56,9 +56,14 @@ export interface Bot {
   welcome_message: string | null;
   primary_color: string | null;
   is_public: boolean;
+  lead_capture_enabled: boolean;
+  lead_capture_fields: LeadCaptureField[];
+  lead_capture_prompt: string | null;
   created_at: string;
   updated_at: string;
 }
+
+export type LeadCaptureField = "name" | "email" | "phone";
 
 export interface CreateBotInput {
   name: string;
@@ -71,6 +76,9 @@ export interface CreateBotInput {
   personality?: string;
   tone?: string;
   language?: string;
+  lead_capture_enabled?: boolean;
+  lead_capture_fields?: LeadCaptureField[];
+  lead_capture_prompt?: string;
 }
 
 export interface KnowledgeSource {
@@ -106,6 +114,7 @@ export interface Lead {
   email: string | null;
   phone: string | null;
   conversation_id: string;
+  metadata: { captured_via?: "conversation" | "manual"; [key: string]: unknown } | null;
   created_at: string;
 }
 

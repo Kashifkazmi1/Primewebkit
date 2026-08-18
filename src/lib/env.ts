@@ -18,4 +18,11 @@ export const env = {
     process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
     "1044212666179-nmo21qhhgr7hc4n8sdm34ccsgs5sdo84.apps.googleusercontent.com",
   ),
+  // External checkout page — this app never collects payment details
+  // itself, every upgrade CTA links out to this URL.
+  upgradeUrl: required(
+    "NEXT_PUBLIC_UPGRADE_BASIC_URL",
+    process.env.NEXT_PUBLIC_UPGRADE_BASIC_URL,
+    "https://pay.primewebkit.com/ai/basic-plan/",
+  ),
 };
