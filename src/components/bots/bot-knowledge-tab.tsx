@@ -91,7 +91,7 @@ export function BotKnowledgeTab({ botUuid }: { botUuid: string }) {
                       <Icon className="size-4" />
                     </span>
                     <div>
-                      <p className="text-sm font-medium">{source.title}</p>
+                      <p className="text-sm font-medium">{source.source_name || source.source_url || "Untitled source"}</p>
                       <p className="text-xs text-muted-foreground">Added {formatDate(source.created_at)}</p>
                     </div>
                   </div>

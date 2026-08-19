@@ -93,9 +93,9 @@ export default function AdminPage() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
-        <StatTile icon={Users} label="Total users" value={overview?.total_users} />
-        <StatTile icon={CheckCircle2} label="Active subscriptions" value={overview?.active_subscriptions} />
-        <StatTile icon={DollarSign} label="MRR" value={overview ? `$${overview.mrr}` : undefined} />
+        <StatTile icon={Users} label="Total users" value={overview?.users.total} />
+        <StatTile icon={CheckCircle2} label="Active subscriptions" value={overview?.subscriptions.active ?? 0} />
+        <StatTile icon={DollarSign} label="Revenue this month" value={overview ? `$${overview.revenue.this_month.toFixed(2)}` : undefined} />
       </div>
 
       <Card>

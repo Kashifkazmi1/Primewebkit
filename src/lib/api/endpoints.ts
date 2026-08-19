@@ -107,10 +107,12 @@ export const apiKeysApi = {
 
 export const subscriptionsApi = {
   plans: () => apiFetch<Plan[]>("/subscriptions/plans"),
-  current: () => apiFetch<Subscription | null>("/subscriptions/current"),
+  current: () =>
+    apiFetch<{ subscription: Subscription | null; limits_and_usage: Record<string, unknown> }>("/subscriptions/current"),
   history: () => apiFetch<Subscription[]>("/subscriptions/history"),
-  subscribe: (planUuid: string) => apiFetch<Subscription>("/subscriptions", { method: "POST", body: { plan_id: planUuid } }),
-  cancel: (uuid: string) => apiFetch<null>(`/subscriptions/${uuid}/cancel`, { method: "POST" }),
+  subscribe: (planUuid: string, billingCycle: "monthly" | "yearly" = "monthly") =>
+    apiFetch<Subscription>("/subscriptions", { method: "POST", body: { plan_id: planUuid, billing_cycle: billingCycle } }),
+  cancel: (uuid: string) => apiFetch<Subscription>(`/subscriptions/${uuid}/cancel`, { method: "POST" }),
   invoices: () => apiFetch<Invoice[]>("/subscriptions/invoices"),
 };
 

@@ -25,7 +25,7 @@ export default function BillingPage() {
     subscriptionsApi.plans().then(setPlans).catch(() => setPlans([]));
     subscriptionsApi
       .current()
-      .then(setSubscription)
+      .then((res) => setSubscription(res.subscription))
       .catch(() => setSubscription(null));
     subscriptionsApi.invoices().then(setInvoices).catch(() => setInvoices([]));
   }, []);
@@ -33,7 +33,7 @@ export default function BillingPage() {
   async function handleSubscribe(planId: string) {
     setSubscribing(planId);
     try {
-      const sub = await subscriptionsApi.subscribe(planId);
+      const sub = await subscriptionsApi.subscribe(planId, "monthly");
       setSubscription(sub);
       toast.success("Plan updated.");
     } catch (error) {
@@ -60,6 +60,14 @@ export default function BillingPage() {
         <div className="grid gap-4 sm:grid-cols-3">
           {plans.map((plan) => {
             const isCurrent = subscription?.plan.id === plan.id;
+            const featureLabels: Record<keyof Plan["features"], string> = {
+              api_access: "API access",
+              analytics: "Analytics",
+              white_label: "White-label branding",
+              custom_domain: "Custom domain",
+              priority_support: "Priority support",
+              streaming: "Streaming responses",
+            };
             return (
               <Card key={plan.id} className={cn("flex flex-col", isCurrent && "border-primary shadow-glow")}>
                 <CardHeader>
@@ -69,25 +77,35 @@ export default function BillingPage() {
                   </div>
                   <CardDescription>
                     <span className="font-display text-2xl font-semibold text-foreground">
-                      ${plan.price_monthly}
+                      ${plan.monthly_price}
                     </span>{" "}
                     /month
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="flex flex-1 flex-col justify-between gap-4">
                   <ul className="space-y-2 text-sm">
-                    {plan.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-2">
-                        <Check className="mt-0.5 size-4 shrink-0 text-success" />
-                        {feature}
-                      </li>
-                    ))}
+                    <li className="flex items-start gap-2">
+                      <Check className="mt-0.5 size-4 shrink-0 text-success" />
+                      {plan.limits.bots} chatbot{plan.limits.bots === 1 ? "" : "s"}
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <Check className="mt-0.5 size-4 shrink-0 text-success" />
+                      {plan.limits.messages_per_month.toLocaleString()} messages / month
+                    </li>
+                    {(Object.keys(featureLabels) as (keyof Plan["features"])[])
+                      .filter((key) => plan.features[key])
+                      .map((key) => (
+                        <li key={key} className="flex items-start gap-2">
+                          <Check className="mt-0.5 size-4 shrink-0 text-success" />
+                          {featureLabels[key]}
+                        </li>
+                      ))}
                   </ul>
                   {isCurrent ? (
                     <Button variant="outline" disabled className="w-full">
                       Current plan
                     </Button>
-                  ) : plan.price_monthly === 0 ? (
+                  ) : plan.monthly_price === 0 ? (
                     <Button
                       variant="primary"
                       isLoading={subscribing === plan.id}
@@ -128,9 +146,9 @@ export default function BillingPage() {
               <TableBody>
                 {invoices.map((invoice) => (
                   <TableRow key={invoice.id}>
-                    <TableCell>{formatDate(invoice.issued_at)}</TableCell>
+                    <TableCell>{formatDate(invoice.created_at)}</TableCell>
                     <TableCell>
-                      {invoice.currency} {invoice.amount.toFixed(2)}
+                      {invoice.currency} {invoice.total.toFixed(2)}
                     </TableCell>
                     <TableCell>
                       <Badge variant={invoice.status === "paid" ? "success" : "warning"}>{invoice.status}</Badge>

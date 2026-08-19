@@ -22,7 +22,7 @@ export default function DashboardPage() {
     botsApi.list().then(setBots).catch(() => setBots([]));
     subscriptionsApi
       .current()
-      .then(setSubscription)
+      .then((res) => setSubscription(res.subscription))
       .catch(() => setSubscription(null));
   }, []);
 
