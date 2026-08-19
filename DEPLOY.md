@@ -40,9 +40,29 @@ Hostinger via hPanel File Manager: zip the contents of `out/`, upload the
 zip into `public_html`, then extract it there.
 
 `public/.htaccess` is copied into `out/` automatically by `next build` and
-handles HTTPS redirection, security headers, and serving `<route>/index.html`
-for clean URLs — make sure hidden files are visible in File Manager so it
-doesn't get skipped during upload.
+handles security headers — make sure hidden files are visible in File
+Manager so it doesn't get skipped during upload.
+
+### Why `npm run build` also runs a script after `next build`
+
+This Next.js version's static export writes each route's real page as a
+flat `<route>.html` file — `<route>/` (created whenever some other route
+is nested under it) holds only client-navigation payload files, never an
+`index.html`. Most hosts don't care and fall through to a rewrite rule for
+the directory-shaped URL, but some (confirmed: Hostinger/LiteSpeed) deny
+access to a directory with no index file before any `.htaccess`
+`RewriteRule` gets a chance to redirect away from it — 403ing every route
+that has anything nested under it, which in this export is effectively
+every route.
+
+`scripts/fix-static-export.mjs` runs automatically after `next build`
+(see the `build` script in `package.json`) and copies each such flat
+`<route>.html` into `<route>/index.html`, so every route resolves via the
+server's ordinary `DirectoryIndex` behavior instead of depending on a
+rewrite rule at all. If you ever see a route 403 in production after a
+correct upload, check whether `<route>/index.html` actually exists on the
+server — if it doesn't, the upload didn't include it, or was built with
+an older version of this script.
 
 ## Environment configuration
 
