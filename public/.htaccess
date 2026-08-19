@@ -13,30 +13,18 @@
 </IfModule>
 
 # Pretty URLs. This Next.js version's static export does NOT write
-# <route>/index.html — the real page is the sibling <route>.html file;
-# <route>/ (when it exists at all) holds only client-navigation payload
-# files, never a renderable page. That means two distinct cases:
+# <route>/index.html — the real page is always the flat <route>.html
+# file; <route>/ (when it exists at all, because some other route is
+# nested under it) holds only client-navigation payload files, never a
+# renderable page. So: whenever a flat "<path>.html" export exists on
+# disk, serve it — regardless of whether <path> also happens to exist
+# as a directory. Deliberately does NOT branch on -f/-d for <path>
+# itself, since that distinction is what silently broke this on some
+# server configurations.
 <IfModule mod_rewrite.c>
   RewriteEngine On
-
-  # 1) <route>/ exists as a directory (because some other route is
-  #    nested under it) but has no index.html of its own — serve the
-  #    sibling <route>.html instead of letting Apache attempt a
-  #    directory listing, which 403s with Indexes disabled. Without
-  #    this rule every route with any nested route below it — /dashboard,
-  #    /admin, /blog, /docs, etc. — 403s on direct or hard navigation.
-  RewriteCond %{REQUEST_FILENAME} -d
-  RewriteCond %{REQUEST_FILENAME}index.html !-f
   RewriteCond %{DOCUMENT_ROOT}/$1.html -f
-  RewriteRule ^(.+)/$ /$1.html [L]
-
-  # 2) No file and no directory exist at all for this path — fall back
-  #    to the flat <route>.html export (covers every route with no
-  #    nested routes below it, e.g. /about, /pricing).
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteCond %{REQUEST_FILENAME}.html -f
-  RewriteRule ^(.*)$ $1.html [L]
+  RewriteRule ^(.*[^/])/?$ $1.html [L]
 </IfModule>
 
 # Custom 404 page (Next exports one at build time).
