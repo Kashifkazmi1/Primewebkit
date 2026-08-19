@@ -21,11 +21,15 @@
 # as a directory. Deliberately does NOT branch on -f/-d for <path>
 # itself, since that distinction is what silently broke this on some
 # server configurations.
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteCond %{DOCUMENT_ROOT}/$1.html -f
-  RewriteRule ^(.*[^/])/?$ $1.html [L]
-</IfModule>
+#
+# Deliberately NOT wrapped in <IfModule mod_rewrite.c> — on this host
+# (Hostinger/LiteSpeed) that check evaluates false even though the
+# rewrite engine itself works, silently skipping the whole block and
+# producing exactly the 403 this rule exists to fix. mod_headers.c
+# above still gates correctly, so only this block is unwrapped.
+RewriteEngine On
+RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+RewriteRule ^(.*[^/])/?$ $1.html [L]
 
 # Custom 404 page (Next exports one at build time).
 ErrorDocument 404 /404.html
