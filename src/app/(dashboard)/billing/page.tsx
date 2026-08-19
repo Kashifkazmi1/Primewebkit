@@ -115,7 +115,9 @@ export default function BillingPage() {
                       Switch to Free
                     </Button>
                   ) : (
-                    <UpgradeButton className="w-full">Upgrade to {plan.name}</UpgradeButton>
+                    <UpgradeButton className="w-full" plan={plan.slug}>
+                      Upgrade to {plan.name}
+                    </UpgradeButton>
                   )}
                 </CardContent>
               </Card>

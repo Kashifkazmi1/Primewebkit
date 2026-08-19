@@ -60,7 +60,7 @@ export default function PricingPage() {
                     <Link href="/register">{plan.cta}</Link>
                   </Button>
                 ) : (
-                  <UpgradeButton className="mt-6 w-full" variant={plan.highlighted ? "primary" : "outline"}>
+                  <UpgradeButton className="mt-6 w-full" variant={plan.highlighted ? "primary" : "outline"} plan={plan.slug}>
                     {plan.cta}
                   </UpgradeButton>
                 )}

@@ -2,6 +2,7 @@ import { Check } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/marketing/reveal";
+import { UpgradeButton } from "@/components/marketing/upgrade-button";
 import { pricingPlans } from "@/lib/content/pricing";
 import { cn } from "@/lib/utils";
 
@@ -43,9 +44,15 @@ export function PricingPreview() {
                   </li>
                 ))}
               </ul>
-              <Button asChild className="mt-6" variant={plan.highlighted ? "primary" : "outline"}>
-                <Link href="/register">{plan.cta}</Link>
-              </Button>
+              {plan.price === 0 ? (
+                <Button asChild className="mt-6" variant={plan.highlighted ? "primary" : "outline"}>
+                  <Link href="/register">{plan.cta}</Link>
+                </Button>
+              ) : (
+                <UpgradeButton className="mt-6 w-full" variant={plan.highlighted ? "primary" : "outline"} plan={plan.slug}>
+                  {plan.cta}
+                </UpgradeButton>
+              )}
             </div>
           </Reveal>
         ))}

@@ -65,7 +65,8 @@ export function Hero() {
             transition={{ duration: 0.6, delay: 0.25 }}
             className="mt-5 text-xs text-muted-foreground"
           >
-            No credit card required &middot; Free plan available &middot; Sign in with Google
+            Start for free, no credit card required &middot; First month free &middot; Train your agent and start
+            getting leads before you ever pay a cent
           </motion.p>
         </div>
 
