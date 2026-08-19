@@ -189,11 +189,7 @@ export function BotWidgetTab({ botUuid }: { botUuid: string }) {
     botsApi
       .embedScript(botUuid)
       .then((res) => setScript(res.snippet))
-      .catch(() =>
-        setScript(
-          `<script>\n  (function () {\n    var s = document.createElement('script');\n    s.src = "${env.apiUrl}/widget/${botUuid}/config";\n    s.async = true;\n    s.setAttribute('data-bot-id', "${botUuid}");\n    document.body.appendChild(s);\n  })();\n</script>`,
-        ),
-      );
+      .catch(() => setScript(`<script src="${env.widgetJsUrl}" data-bot-id="${botUuid}" async></script>`));
   }, [botUuid]);
 
   async function copy() {

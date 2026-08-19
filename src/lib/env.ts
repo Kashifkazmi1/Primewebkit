@@ -7,9 +7,15 @@ function required(name: string, value: string | undefined, fallback?: string): s
 // The backend (this repo's PHP API) is deployed on its own subdomain,
 // api.primewebkit.com, separate from this frontend at chat.primewebkit.com —
 // two origins, talking cross-origin via CORS (see backend CORS_ALLOWED_ORIGINS).
+const apiUrl = required("NEXT_PUBLIC_API_URL", process.env.NEXT_PUBLIC_API_URL, "https://api.primewebkit.com/api/v1");
+
 export const env = {
-  apiUrl: required("NEXT_PUBLIC_API_URL", process.env.NEXT_PUBLIC_API_URL, "https://api.primewebkit.com/api/v1"),
+  apiUrl,
   siteUrl: required("NEXT_PUBLIC_SITE_URL", process.env.NEXT_PUBLIC_SITE_URL, "https://chat.primewebkit.com"),
+  // public/widget.js is a real static file served from the API's own
+  // origin (same host as apiUrl, one level up from /api/v1) — the
+  // self-contained embeddable chat bubble script.
+  widgetJsUrl: apiUrl.replace(/\/api\/v\d+\/?$/, "") + "/widget.js",
   // Same default as the backend's config/google.php — a public OAuth
   // client id, not a secret. Overridable via env var per environment.
   googleClientId: required(

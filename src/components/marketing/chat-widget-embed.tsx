@@ -1,5 +1,3 @@
-"use client";
-
 import Script from "next/script";
 import { env } from "@/lib/env";
 
@@ -10,19 +8,5 @@ import { env } from "@/lib/env";
 export function ChatWidgetEmbed() {
   if (!env.widgetBotId) return null;
 
-  return (
-    <Script
-      id="primewebkit-widget"
-      strategy="afterInteractive"
-      dangerouslySetInnerHTML={{
-        __html: `(function () {
-  var s = document.createElement('script');
-  s.src = "${env.apiUrl}/widget/${env.widgetBotId}/config";
-  s.async = true;
-  s.setAttribute('data-bot-id', "${env.widgetBotId}");
-  document.body.appendChild(s);
-})();`,
-      }}
-    />
-  );
+  return <Script src={env.widgetJsUrl} data-bot-id={env.widgetBotId} strategy="afterInteractive" async />;
 }
