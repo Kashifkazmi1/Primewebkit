@@ -175,7 +175,7 @@ function AddSourceDialog({
               <Button
                 disabled={!websiteUrl}
                 isLoading={submitting}
-                onClick={() => submit(() => botsApi.addWebsite(botUuid, { url: websiteUrl }))}
+                onClick={() => submit(() => botsApi.addWebsite(botUuid, { start_url: websiteUrl }))}
               >
                 Crawl website
               </Button>
@@ -194,7 +194,7 @@ function AddSourceDialog({
               <Button
                 disabled={!textTitle || !textContent}
                 isLoading={submitting}
-                onClick={() => submit(() => botsApi.addText(botUuid, { title: textTitle, content: textContent }))}
+                onClick={() => submit(() => botsApi.addText(botUuid, { source_name: textTitle, content: textContent }))}
               >
                 Add text
               </Button>

@@ -11,7 +11,7 @@ interface AuthContextValue {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<User>;
   loginWithGoogle: (credential: string) => Promise<User>;
-  register: (name: string, email: string, password: string) => Promise<User>;
+  register: (name: string, email: string, password: string, passwordConfirmation: string) => Promise<User>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
   setUser: (user: User | null) => void;
@@ -49,8 +49,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return payload.user;
   }, []);
 
-  const register = useCallback(async (name: string, email: string, password: string) => {
-    const payload = await authApi.register({ name, email, password });
+  const register = useCallback(async (name: string, email: string, password: string, passwordConfirmation: string) => {
+    const payload = await authApi.register({ name, email, password, password_confirmation: passwordConfirmation });
     setTokens(payload.access_token, payload.refresh_token);
     setUser(payload.user);
     return payload.user;

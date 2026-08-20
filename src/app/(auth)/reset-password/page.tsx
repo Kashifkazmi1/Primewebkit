@@ -33,7 +33,7 @@ function ResetPasswordForm() {
 
   async function onSubmit(values: ResetPasswordValues) {
     try {
-      await authApi.resetPassword({ token, password: values.password });
+      await authApi.resetPassword({ token, password: values.password, password_confirmation: values.password_confirmation });
       setDone(true);
       toast.success("Password reset — please sign in again.");
       setTimeout(() => router.push("/login"), 1500);
