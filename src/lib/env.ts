@@ -33,5 +33,5 @@ export const env = {
     "https://pay.primewebkit.com/ai/basic-plan/",
   ),
   // The bot embedded as a live chat widget on this marketing site itself.
-  widgetBotId: required("NEXT_PUBLIC_WIDGET_BOT_ID", process.env.NEXT_PUBLIC_WIDGET_BOT_ID, "868e0570-58f4-4e96-8d0a-9927e518190a"),
+  widgetBotId: required("NEXT_PUBLIC_WIDGET_BOT_ID", process.env.NEXT_PUBLIC_WIDGET_BOT_ID, "216ce59b-69d8-4e71-9cf9-85137bf3ace2"),
 };
