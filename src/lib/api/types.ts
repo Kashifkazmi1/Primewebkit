@@ -220,6 +220,8 @@ export interface Plan {
     custom_domain: boolean;
     priority_support: boolean;
     streaming: boolean;
+    lead_capture: boolean;
+    conversation_history: boolean;
   };
   trial_days: number;
   is_active: boolean;

@@ -15,6 +15,7 @@ import { Switch } from "@/components/ui/switch";
 import { ApiError } from "@/lib/api/client";
 import { botsApi } from "@/lib/api/endpoints";
 import type { Widget } from "@/lib/api/types";
+import { usePlanFeatures } from "@/lib/billing/use-plan-features";
 import { env } from "@/lib/env";
 
 const schema = z.object({
@@ -60,6 +61,8 @@ function AppearanceForm({
     watch,
     formState: { isSubmitting, isDirty },
   } = useForm<Values>({ resolver: zodResolver(schema), defaultValues: toValues(widget) });
+  const { hasFeature } = usePlanFeatures();
+  const canRemoveBranding = hasFeature("white_label");
 
   async function onSubmit(values: Values) {
     try {
@@ -162,8 +165,15 @@ function AppearanceForm({
 
           <div className="flex flex-wrap gap-6">
             <label className="flex items-center gap-2.5 text-sm">
-              <Switch checked={watch("show_branding")} onCheckedChange={(checked) => setValue("show_branding", checked, { shouldDirty: true })} />
+              <Switch
+                checked={canRemoveBranding ? watch("show_branding") : true}
+                disabled={!canRemoveBranding}
+                onCheckedChange={(checked) => setValue("show_branding", checked, { shouldDirty: true })}
+              />
               Show &quot;Powered by&quot; branding
+              {!canRemoveBranding && (
+                <span className="text-xs text-muted-foreground">(Growth plan removes this)</span>
+              )}
             </label>
             <label className="flex items-center gap-2.5 text-sm">
               <Switch checked={watch("is_active")} onCheckedChange={(checked) => setValue("is_active", checked, { shouldDirty: true })} />

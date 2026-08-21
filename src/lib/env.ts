@@ -24,13 +24,15 @@ export const env = {
     "1044212666179-nmo21qhhgr7hc4n8sdm34ccsgs5sdo84.apps.googleusercontent.com",
   ),
   // External checkout page — this app never collects payment details
-  // itself, every upgrade CTA links out to this URL. The plan's slug is
-  // appended as a query param (?plan=starter) so the checkout page can
-  // route to the right price.
+  // itself, every upgrade CTA links out to this URL (pay.primewebkit.com,
+  // a WordPress + WooCommerce + WooCommerce Subscriptions + Stripe site).
+  // ?plan=<slug>&cycle=<monthly|yearly>&email=<email> tell its
+  // checkout-redirect page which product to add to the cart and how to
+  // pre-fill the checkout email.
   upgradeUrl: required(
     "NEXT_PUBLIC_UPGRADE_BASIC_URL",
     process.env.NEXT_PUBLIC_UPGRADE_BASIC_URL,
-    "https://pay.primewebkit.com/ai/basic-plan/",
+    "https://pay.primewebkit.com/checkout-redirect/",
   ),
   // The bot embedded as a live chat widget on this marketing site itself.
   widgetBotId: required("NEXT_PUBLIC_WIDGET_BOT_ID", process.env.NEXT_PUBLIC_WIDGET_BOT_ID, "216ce59b-69d8-4e71-9cf9-85137bf3ace2"),

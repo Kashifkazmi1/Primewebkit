@@ -13,9 +13,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { ApiError } from "@/lib/api/client";
 import { subscriptionsApi } from "@/lib/api/endpoints";
 import type { Invoice, Plan, Subscription } from "@/lib/api/types";
+import { useAuth } from "@/lib/auth/auth-context";
 import { cn, formatDate } from "@/lib/utils";
 
 export default function BillingPage() {
+  const { user } = useAuth();
   const [plans, setPlans] = useState<Plan[] | null>(null);
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [invoices, setInvoices] = useState<Invoice[] | null>(null);
@@ -67,6 +69,8 @@ export default function BillingPage() {
               custom_domain: "Custom domain",
               priority_support: "Priority support",
               streaming: "Streaming responses",
+              lead_capture: "Lead capture",
+              conversation_history: "Conversation history",
             };
             return (
               <Card key={plan.id} className={cn("flex flex-col", isCurrent && "border-primary shadow-glow")}>
@@ -115,7 +119,7 @@ export default function BillingPage() {
                       Switch to Free
                     </Button>
                   ) : (
-                    <UpgradeButton className="w-full" plan={plan.slug}>
+                    <UpgradeButton className="w-full" plan={plan.slug} email={user?.email}>
                       Upgrade to {plan.name}
                     </UpgradeButton>
                   )}
