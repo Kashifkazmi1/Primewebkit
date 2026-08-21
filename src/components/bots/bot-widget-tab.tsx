@@ -44,7 +44,15 @@ function toValues(widget: Widget): Values {
   };
 }
 
-function AppearanceForm({ widget, onUpdated }: { widget: Widget; onUpdated: (widget: Widget) => void }) {
+function AppearanceForm({
+  botUuid,
+  widget,
+  onUpdated,
+}: {
+  botUuid: string;
+  widget: Widget;
+  onUpdated: (widget: Widget) => void;
+}) {
   const {
     register,
     handleSubmit,
@@ -55,7 +63,7 @@ function AppearanceForm({ widget, onUpdated }: { widget: Widget; onUpdated: (wid
 
   async function onSubmit(values: Values) {
     try {
-      const updated = await botsApi.updateWidget(widget.id, {
+      const updated = await botsApi.updateWidget(botUuid, {
         theme: values.theme,
         position: values.position,
         primary_color: values.primary_color || undefined,
@@ -201,7 +209,11 @@ export function BotWidgetTab({ botUuid }: { botUuid: string }) {
 
   return (
     <div className="space-y-6">
-      {widget === null ? <Skeleton className="h-64" /> : <AppearanceForm widget={widget} onUpdated={setWidget} />}
+      {widget === null ? (
+        <Skeleton className="h-64" />
+      ) : (
+        <AppearanceForm botUuid={botUuid} widget={widget} onUpdated={setWidget} />
+      )}
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
