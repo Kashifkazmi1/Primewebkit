@@ -18,8 +18,8 @@ const FEATURE_COPY: Record<keyof Plan["features"], { title: string; description:
     description: "Upgrade to Starter or above to read full chat transcripts and export conversations.",
   },
   white_label: {
-    title: "Removing PrimeWebKit branding is a Growth feature",
-    description: "Upgrade to the Growth plan to hide \"Powered by PrimeWebKit\" on your widget.",
+    title: "Removing PrimeWebKit branding is a Pro feature",
+    description: "Upgrade to the Pro plan to hide \"Powered by PrimeWebKit\" on your widget.",
   },
   api_access: { title: "API access is a paid feature", description: "Upgrade your plan to generate API keys." },
   analytics: { title: "Analytics is a paid feature", description: "Upgrade your plan to unlock analytics." },
@@ -42,7 +42,7 @@ export function FeatureGate({ feature, children }: { feature: keyof Plan["featur
   if (hasFeature(feature)) return <>{children}</>;
 
   const copy = FEATURE_COPY[feature];
-  const plan = feature === "white_label" ? "growth" : "starter";
+  const plan = feature === "white_label" ? "pro" : "starter";
 
   return (
     <EmptyState
