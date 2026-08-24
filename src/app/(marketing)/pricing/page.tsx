@@ -21,14 +21,14 @@ export default function PricingPage() {
       <PageHeader
         eyebrow="Pricing"
         title="Plans that scale with your support volume"
-        description="Every plan includes streaming answers, lead capture, and analytics. Upgrade for more chatbots, messages, and white-label branding."
+        description="Every plan includes streaming answers. Upgrade for lead capture, conversation history, analytics, more chatbots and messages, and white-label branding."
       />
 
       <section className="container-page py-20">
         <p className="mx-auto -mt-4 mb-10 max-w-xl text-center text-sm font-medium text-primary">
           First month free on any plan — no credit card required.
         </p>
-        <div className="grid gap-6 sm:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {pricingPlans.map((plan, index) => (
             <Reveal key={plan.name} delay={index * 0.08}>
               <div
@@ -69,9 +69,9 @@ export default function PricingPage() {
           ))}
         </div>
         <p className="mt-10 text-center text-sm text-muted-foreground">
-          Need higher volume, SSO, or a custom contract?{" "}
+          Need something beyond Enterprise — SSO, a custom contract, or a dedicated instance?{" "}
           <Link href="/contact" className="font-medium text-primary hover:underline">
-            Talk to us about Enterprise
+            Talk to us
           </Link>
           .
         </p>
