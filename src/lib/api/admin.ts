@@ -1,4 +1,5 @@
 import { apiFetch, apiFetchPaginated } from "./client";
+import type { Subscription } from "./types";
 
 export interface AdminOverview {
   users: { total: number; active: number; new_today: number; monthly_signups: number };
@@ -32,4 +33,9 @@ export const adminApi = {
     }),
   suspendUser: (uuid: string) => apiFetch<null>(`/admin/users/${uuid}/suspend`, { method: "POST" }),
   activateUser: (uuid: string) => apiFetch<null>(`/admin/users/${uuid}/activate`, { method: "POST" }),
+  assignPlan: (uuid: string, planId: string, billingCycle: "monthly" | "yearly" = "monthly") =>
+    apiFetch<Subscription>(`/admin/users/${uuid}/assign-plan`, {
+      method: "POST",
+      body: { plan_id: planId, billing_cycle: billingCycle },
+    }),
 };
