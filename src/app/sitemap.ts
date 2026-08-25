@@ -20,6 +20,8 @@ const staticRoutes = [
   { path: "/ai-chatbot-for-lead-generation", priority: 0.9, changeFrequency: "monthly" as const },
   { path: "/ai-customer-support-agent", priority: 0.9, changeFrequency: "monthly" as const },
   { path: "/add-ai-chatbot-to-website", priority: 0.9, changeFrequency: "monthly" as const },
+  { path: "/ai-chatbot-pricing", priority: 0.9, changeFrequency: "monthly" as const },
+  { path: "/ai-chatbot-for-local-businesses", priority: 0.8, changeFrequency: "monthly" as const },
   { path: "/about", priority: 0.5, changeFrequency: "yearly" as const },
   { path: "/contact", priority: 0.5, changeFrequency: "yearly" as const },
   { path: "/security", priority: 0.5, changeFrequency: "monthly" as const },

@@ -19,6 +19,8 @@ const productLinks = [
   { href: "/ai-chatbot-for-lead-generation", label: "Lead generation", description: "Capture leads without a form" },
   { href: "/ai-customer-support-agent", label: "Support agent", description: "24/7 answers grounded in your content" },
   { href: "/add-ai-chatbot-to-website", label: "Add to your site", description: "One script tag, any platform" },
+  { href: "/ai-chatbot-pricing", label: "Pricing guide", description: "What a chatbot actually costs" },
+  { href: "/ai-chatbot-for-local-businesses", label: "For local businesses", description: "Turn website visitors into booked customers" },
   { href: "/templates", label: "Templates", description: "Pre-built chatbots for common use cases" },
   { href: "/integrations", label: "Integrations", description: "Connect the tools you already use" },
   { href: "/use-cases", label: "Use cases", description: "Support, sales, and lead generation" },

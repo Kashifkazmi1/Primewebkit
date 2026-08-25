@@ -11,6 +11,8 @@ const columns = [
       { href: "/ai-chatbot-for-lead-generation", label: "Lead generation" },
       { href: "/ai-customer-support-agent", label: "Support agent" },
       { href: "/add-ai-chatbot-to-website", label: "Add to your site" },
+      { href: "/ai-chatbot-pricing", label: "Pricing guide" },
+      { href: "/ai-chatbot-for-local-businesses", label: "For local businesses" },
       { href: "/templates", label: "Templates" },
       { href: "/integrations", label: "Integrations" },
       { href: "/use-cases", label: "Use cases" },

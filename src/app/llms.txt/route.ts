@@ -34,6 +34,8 @@ export function GET() {
 - Lead capture guide: ${env.siteUrl}/ai-chatbot-for-lead-generation
 - Support agent guide: ${env.siteUrl}/ai-customer-support-agent
 - Embedding guide: ${env.siteUrl}/add-ai-chatbot-to-website
+- Pricing guide: ${env.siteUrl}/ai-chatbot-pricing
+- Local business guide: ${env.siteUrl}/ai-chatbot-for-local-businesses
 - API reference: ${env.siteUrl}/api
 - Use cases: ${env.siteUrl}/use-cases
 - Industries: ${env.siteUrl}/industries

@@ -283,6 +283,138 @@ export const pillars: Pillar[] = [
     relatedPillars: ["ai-customer-support-agent", "ai-chatbot-for-lead-generation"],
     relatedPosts: ["webhooks-vs-polling-for-chatbot-integrations", "embed-checklist-before-going-live"],
   },
+  {
+    slug: "ai-chatbot-pricing",
+    eyebrow: "Pricing",
+    title: "AI chatbot pricing: what it actually costs to add one to your website",
+    metaDescription:
+      "What drives AI chatbot pricing, typical plan structures, the costs beyond the subscription, and how to judge whether it's worth it for your business.",
+    intro: [
+      "\"How much does a chatbot cost\" doesn't have a single answer, because the honest answer depends on how much of it you're actually using — message volume, number of bots, and which features matter to your business all move the number. This page breaks down what actually drives the price, what a typical structure looks like, and the costs that show up outside the subscription line.",
+    ],
+    sections: [
+      {
+        id: "what-drives-cost",
+        heading: "What actually drives chatbot pricing",
+        paragraphs: [
+          "Three variables do most of the work in any chatbot pricing structure. Message volume is the big one — a bot answering a few hundred conversations a month costs a provider (and therefore you) far less to run than one handling tens of thousands, since every AI-generated reply has a real compute cost behind it. Number of chatbots is the second — a single-location business needs one bot, while a multi-location chain or an agency managing bots for several clients needs several, each with its own knowledge base and settings.",
+          "The third is feature access rather than usage: lead capture, API access, white-label branding, and priority support are typically reserved for paid tiers rather than a free plan, because they represent real ongoing engineering and support cost, not just compute. A pricing page that lists these as tier differentiators — rather than usage caps — is telling you which features the provider considers premium, not just which are technically harder to build.",
+        ],
+      },
+      {
+        id: "typical-price-ranges",
+        heading: "What a typical plan structure looks like",
+        paragraphs: [
+          "Most credible chatbot platforms — PrimeWebKit included — structure pricing as a free tier for trying the product with real limits (one bot, a capped number of monthly messages), then a small handful of paid tiers that scale up chatbot count, message volume, and feature access together. A free plan good enough to actually evaluate whether the product fits your content and use case, without needing a credit card, is the right bar to look for before ever paying anything — see our current plans on the pricing page for exact numbers, since those are the figures that stay accurate as plans evolve.",
+          "Be skeptical of pricing that scales purely on \"number of bots\" with no message cap, since that structure makes it hard to predict your actual monthly cost. Message-based or hybrid caps are more transparent — you know upfront what a busy month costs versus a quiet one, rather than discovering it at renewal.",
+        ],
+      },
+      {
+        id: "hidden-costs",
+        heading: "Costs that show up outside the subscription price",
+        paragraphs: [
+          "The subscription price is rarely the whole cost. Preparing content for the knowledge base — writing Q&A pairs for your most common questions, cleaning up outdated help docs before crawling them — takes real time, usually a few hours for a first pass rather than days, but it's not zero. If your plan has a monthly message cap, exceeding it either throttles the bot or requires an upgrade mid-cycle, so it's worth estimating your realistic monthly conversation volume before choosing a tier rather than after hitting a wall.",
+          "The costs that don't show up: install time (a single script tag, so effectively free), and ongoing maintenance once content is current (checking in periodically, not a recurring engineering task). Compared to hiring even part-time support staff, the total cost of a chatbot — subscription plus setup time — is usually a fraction, which is the actual comparison worth making rather than treating the subscription price as the full cost of the alternative.",
+        ],
+      },
+      {
+        id: "is-it-worth-it",
+        heading: "Whether it's worth it for your business",
+        paragraphs: [
+          "The return on a chatbot shows up in two places: deflected support volume (repetitive questions answered without a human touching them) and captured leads that would otherwise have left anonymously. Both are measurable — most platforms show conversation counts and lead counts directly in the dashboard — so the honest way to judge \"worth it\" after a month isn't a gut feeling, it's comparing captured leads and deflected conversations against the plan's monthly cost.",
+          "For a business getting even a handful of extra leads a month that wouldn't have converted through a static contact form, or saving a few hours of repetitive support replies, a paid plan pays for itself well before the higher tiers' more advanced features come into play. Start on the free plan, measure for a few weeks, and let that data — not a sales page — decide whether upgrading makes sense.",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "Is there a free AI chatbot plan with no credit card required?",
+        answer: "Yes — PrimeWebKit's free plan requires no credit card and includes enough to fully evaluate the product: one chatbot, a real (if capped) monthly message allowance, and one knowledge source.",
+      },
+      {
+        question: "What happens if I go over my plan's monthly message limit?",
+        answer: "You can upgrade at any time to raise your limit immediately — existing bots, settings, and training data carry over unchanged, nothing needs to be rebuilt.",
+      },
+      {
+        question: "Do higher-priced plans just mean more messages, or more features too?",
+        answer: "Both, typically. Higher tiers usually raise usage limits (bots, messages) and unlock features gated behind plan tier, like white-label branding, API access, and priority support.",
+      },
+      {
+        question: "Can I cancel or downgrade at any time?",
+        answer: "Yes — plans can be changed or cancelled from the billing page at any time; you keep access through the end of the current billing period.",
+      },
+      {
+        question: "Is setup or onboarding an extra cost on top of the subscription?",
+        answer: "No — installing the widget is a single script tag with no setup fee. The only real time cost is preparing your knowledge base content, which most businesses can do in a few hours using content they already have.",
+      },
+    ],
+    relatedPillars: ["ai-chatbot-for-lead-generation", "ai-customer-support-agent"],
+    relatedPosts: ["how-much-does-a-chatbot-cost", "free-vs-paid-chatbot-differences", "chatbot-for-small-business-website"],
+  },
+  {
+    slug: "ai-chatbot-for-local-businesses",
+    eyebrow: "Local business",
+    title: "AI chatbots for local businesses: turning website visitors into booked customers",
+    metaDescription:
+      "How local, location-based businesses — clinics, contractors, agencies, and independent practices — use an AI chatbot to answer questions and capture leads around the clock.",
+    intro: [
+      "A local business website usually gets visitors at hours nobody's answering the phone — evenings, weekends, whenever someone finally gets around to searching for a provider near them. A chatbot trained on your services, pricing, and availability answers those visitors immediately, in the moment they're actually deciding whether to reach out, instead of losing them to whichever competitor answers first.",
+    ],
+    sections: [
+      {
+        id: "why-local-businesses",
+        heading: "Why local businesses benefit disproportionately from a chatbot",
+        paragraphs: [
+          "A national e-commerce brand's chatbot competes with dozens of other tabs a visitor has open. A local business's chatbot often competes with nothing — the visitor found one or two providers in their area and is deciding between them right now, usually outside business hours. Being the one that answers instantly, with accurate details about services and pricing, is a disproportionately large advantage for a local business compared to a larger company where the chatbot is one channel among many.",
+          "Local businesses also tend to have a narrower, more repetitive set of questions than a large product catalog would generate — service area, pricing ranges, availability, whether they handle a specific job — which makes them an especially good fit for a knowledge base that's quick to set up and immediately useful.",
+        ],
+      },
+      {
+        id: "common-use-cases",
+        heading: "The most common local-business use cases",
+        paragraphs: [
+          "Answering the questions that would otherwise be a phone call: service area, typical pricing ranges, turnaround time, whether a specific job is something the business handles at all. These are the questions that determine whether a visitor calls or moves to the next search result, and they're exactly the kind of narrow, factual questions a chatbot answers well.",
+          "Booking and lead capture for businesses that take appointments — a chatbot that answers a question and then asks \"want us to call you back to schedule?\" converts an anonymous visitor into a named lead with contact details, without needing a separate booking widget or a form the visitor has to find and fill out unprompted.",
+        ],
+      },
+      {
+        id: "setup-for-local",
+        heading: "Setting one up for a local business",
+        paragraphs: [
+          "The knowledge base for a local business is usually small and quick to build: a handful of Q&A pairs covering service area, pricing, and availability, plus a crawl of the existing website if it already has service pages. Most local businesses have this live within an hour, which is a meaningfully lower setup cost than most other channels claiming to generate leads around the clock.",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "Does a chatbot make sense for a business that only serves one city or region?",
+        answer: "Yes — if anything, a narrow service area makes the knowledge base simpler to build, since there are fewer variations in service area and pricing to cover.",
+      },
+      {
+        question: "Can the chatbot tell visitors whether I serve their specific area?",
+        answer: "Yes, if that information is in the knowledge base — a Q&A pair listing exact service areas, or a crawled service-area page, lets the bot answer that directly.",
+      },
+      {
+        question: "Does it work for businesses that book appointments rather than sell products?",
+        answer: "Yes — combined with lead capture, a chatbot can collect contact details and preferred timing from a visitor who wants to book, creating a lead your team can confirm rather than requiring the bot to manage a live calendar itself.",
+      },
+    ],
+    relatedPillars: ["ai-chatbot-for-lead-generation", "ai-customer-support-agent"],
+    relatedPosts: [
+      "chatbot-for-business-in-london",
+      "chatbot-for-business-in-manchester",
+      "chatbot-for-business-in-birmingham",
+      "chatbot-for-business-in-glasgow",
+      "chatbot-for-business-in-leeds",
+      "chatbot-for-business-in-edinburgh",
+      "chatbot-for-business-in-new-york",
+      "chatbot-for-business-in-los-angeles",
+      "chatbot-for-business-in-chicago",
+      "chatbot-for-business-in-miami",
+      "chatbot-for-business-in-austin",
+      "chatbot-for-business-in-seattle",
+    ],
+  },
 ];
 
 export function getPillar(slug: string): Pillar | undefined {
