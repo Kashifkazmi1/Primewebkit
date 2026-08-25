@@ -41,6 +41,58 @@ export const faqSchema = {
   })),
 };
 
+export function articleSchema({
+  headline,
+  description,
+  url,
+  datePublished,
+  dateModified,
+}: {
+  headline: string;
+  description: string;
+  url: string;
+  datePublished?: string;
+  dateModified?: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline,
+    description,
+    url: `${env.siteUrl}${url}`,
+    ...(datePublished && { datePublished }),
+    ...(dateModified && { dateModified: dateModified ?? datePublished }),
+    author: { "@type": "Organization", name: "PrimeWebKit" },
+    publisher: { "@type": "Organization", name: "PrimeWebKit", logo: { "@type": "ImageObject", url: `${env.siteUrl}/logo.png` } },
+  };
+}
+
+export function blogPostingSchema({
+  headline,
+  description,
+  url,
+  datePublished,
+}: {
+  headline: string;
+  description: string;
+  url: string;
+  datePublished: string;
+}) {
+  return { ...articleSchema({ headline, description, url, datePublished }), "@type": "BlogPosting" };
+}
+
+export function faqPageSchema(items: { question: string; answer: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: { "@type": "Answer", text: item.answer },
+    })),
+  };
+}
+
 export function breadcrumbSchema(items: { name: string; url: string }[]) {
   return {
     "@context": "https://schema.org",

@@ -12,17 +12,24 @@
   </If>
 </IfModule>
 
-# Pretty URLs: Next's static export writes each route as
-# <route>/index.html — serve that file when a visitor requests the
-# folder without "/index.html" on the end, and don't force a redirect
-# that would strip a trailing slash Next itself doesn't add.
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteCond %{REQUEST_FILENAME}.html -f
-  RewriteRule ^(.*)$ $1.html [L]
-</IfModule>
+# Pretty URLs. This Next.js version's static export does NOT write
+# <route>/index.html — the real page is always the flat <route>.html
+# file; <route>/ (when it exists at all, because some other route is
+# nested under it) holds only client-navigation payload files, never a
+# renderable page. So: whenever a flat "<path>.html" export exists on
+# disk, serve it — regardless of whether <path> also happens to exist
+# as a directory. Deliberately does NOT branch on -f/-d for <path>
+# itself, since that distinction is what silently broke this on some
+# server configurations.
+#
+# Deliberately NOT wrapped in <IfModule mod_rewrite.c> — on this host
+# (Hostinger/LiteSpeed) that check evaluates false even though the
+# rewrite engine itself works, silently skipping the whole block and
+# producing exactly the 403 this rule exists to fix. mod_headers.c
+# above still gates correctly, so only this block is unwrapped.
+RewriteEngine On
+RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+RewriteRule ^(.*[^/])/?$ $1.html [L]
 
 # Custom 404 page (Next exports one at build time).
 ErrorDocument 404 /404.html

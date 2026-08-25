@@ -1,4 +1,5 @@
-import { FileText, Globe, MessageSquareText, Rocket } from "lucide-react";
+import { ArrowRight, FileText, Globe, MessageSquareText, Rocket } from "lucide-react";
+import Link from "next/link";
 import { Reveal } from "@/components/marketing/reveal";
 
 const steps = [
@@ -30,6 +31,15 @@ export function WorkflowShowcase() {
             </Reveal>
           ))}
         </div>
+
+        <Reveal delay={0.3} className="mt-10 text-center">
+          <Link
+            href="/docs/install"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+          >
+            See the embed snippet and platform guides <ArrowRight className="size-4" />
+          </Link>
+        </Reveal>
       </div>
     </section>
   );

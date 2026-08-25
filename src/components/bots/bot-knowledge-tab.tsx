@@ -91,7 +91,7 @@ export function BotKnowledgeTab({ botUuid }: { botUuid: string }) {
                       <Icon className="size-4" />
                     </span>
                     <div>
-                      <p className="text-sm font-medium">{source.title}</p>
+                      <p className="text-sm font-medium">{source.source_name || source.source_url || "Untitled source"}</p>
                       <p className="text-xs text-muted-foreground">Added {formatDate(source.created_at)}</p>
                     </div>
                   </div>
@@ -175,7 +175,7 @@ function AddSourceDialog({
               <Button
                 disabled={!websiteUrl}
                 isLoading={submitting}
-                onClick={() => submit(() => botsApi.addWebsite(botUuid, { url: websiteUrl }))}
+                onClick={() => submit(() => botsApi.addWebsite(botUuid, { start_url: websiteUrl }))}
               >
                 Crawl website
               </Button>
@@ -194,7 +194,7 @@ function AddSourceDialog({
               <Button
                 disabled={!textTitle || !textContent}
                 isLoading={submitting}
-                onClick={() => submit(() => botsApi.addText(botUuid, { title: textTitle, content: textContent }))}
+                onClick={() => submit(() => botsApi.addText(botUuid, { source_name: textTitle, content: textContent }))}
               >
                 Add text
               </Button>

@@ -130,7 +130,7 @@ export default function ApiKeysPage() {
             {keys.map((key) => (
               <TableRow key={key.id}>
                 <TableCell>{key.name}</TableCell>
-                <TableCell className="font-mono text-xs">{key.prefix}&hellip;</TableCell>
+                <TableCell className="font-mono text-xs">{key.key_prefix}&hellip;</TableCell>
                 <TableCell className="text-sm text-muted-foreground">
                   {key.last_used_at ? formatDate(key.last_used_at) : "Never"}
                 </TableCell>

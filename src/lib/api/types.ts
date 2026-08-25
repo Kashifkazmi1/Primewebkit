@@ -56,9 +56,14 @@ export interface Bot {
   welcome_message: string | null;
   primary_color: string | null;
   is_public: boolean;
+  lead_capture_enabled: boolean;
+  lead_capture_fields: LeadCaptureField[];
+  lead_capture_prompt: string | null;
   created_at: string;
   updated_at: string;
 }
+
+export type LeadCaptureField = "name" | "email" | "phone";
 
 export interface CreateBotInput {
   name: string;
@@ -71,26 +76,57 @@ export interface CreateBotInput {
   personality?: string;
   tone?: string;
   language?: string;
+  lead_capture_enabled?: boolean;
+  lead_capture_fields?: LeadCaptureField[];
+  lead_capture_prompt?: string;
+}
+
+export interface Widget {
+  id: string;
+  theme: "light" | "dark";
+  position: "bottom-right" | "bottom-left";
+  primary_color: string | null;
+  greeting_message: string | null;
+  placeholder_text: string;
+  show_branding: boolean;
+  custom_css: string | null;
+  allowed_domains: string[];
+  is_active: boolean;
+}
+
+export interface UpdateWidgetInput {
+  theme?: "light" | "dark";
+  position?: "bottom-right" | "bottom-left";
+  primary_color?: string;
+  greeting_message?: string;
+  placeholder_text?: string;
+  show_branding?: boolean;
+  custom_css?: string;
+  allowed_domains?: string[];
+  is_active?: boolean;
 }
 
 export interface KnowledgeSource {
   id: string;
   type: "text" | "qa" | "website" | "document";
-  title: string;
+  source_name: string | null;
+  source_url: string | null;
   status: string;
-  size_kb: number | null;
+  character_count: number | null;
+  chunk_count: number | null;
+  error_message: string | null;
+  processed_at: string | null;
   created_at: string;
 }
 
 export interface Conversation {
   id: string;
-  visitor_name: string | null;
-  visitor_email: string | null;
   status: string;
-  last_message_at: string | null;
+  title: string | null;
   message_count: number;
-  rating: number | null;
-  created_at: string;
+  started_at: string;
+  last_message_at: string | null;
+  ended_at: string | null;
 }
 
 export interface Message {
@@ -105,7 +141,8 @@ export interface Lead {
   name: string | null;
   email: string | null;
   phone: string | null;
-  conversation_id: string;
+  conversation_id: number | null;
+  metadata: { captured_via?: "conversation" | "manual"; [key: string]: unknown } | null;
   created_at: string;
 }
 
@@ -149,8 +186,11 @@ export interface WebhookLog {
 export interface ApiKey {
   id: string;
   name: string;
-  prefix: string;
+  key_prefix: string;
+  scopes: string[];
   last_used_at: string | null;
+  expires_at: string | null;
+  revoked: boolean;
   created_at: string;
 }
 
@@ -162,41 +202,66 @@ export interface Plan {
   id: string;
   name: string;
   slug: string;
-  price_monthly: number;
-  price_yearly: number | null;
+  description: string | null;
+  monthly_price: number;
+  yearly_price: number;
   currency: string;
-  features: string[];
-  limits: Record<string, number>;
+  limits: {
+    bots: number;
+    messages_per_month: number;
+    knowledge_mb: number;
+    storage_mb: number;
+    team_members: number;
+  };
+  features: {
+    api_access: boolean;
+    analytics: boolean;
+    white_label: boolean;
+    custom_domain: boolean;
+    priority_support: boolean;
+    streaming: boolean;
+    lead_capture: boolean;
+    conversation_history: boolean;
+  };
+  trial_days: number;
   is_active: boolean;
 }
 
 export interface Subscription {
   id: string;
-  plan: Plan;
   status: string;
+  billing_cycle: string;
+  provider: string;
   current_period_start: string;
   current_period_end: string;
+  trial_ends_at: string | null;
+  grace_period_ends_at: string | null;
   cancel_at_period_end: boolean;
+  canceled_at: string | null;
+  plan: Plan;
 }
 
 export interface Invoice {
   id: string;
-  amount: number;
+  invoice_number: string;
+  subtotal: number;
+  discount_amount: number;
+  tax_amount: number;
+  total: number;
   currency: string;
   status: string;
-  issued_at: string;
+  due_date: string | null;
   paid_at: string | null;
+  created_at: string;
 }
 
 export interface Team {
   id: string;
   name: string;
-  owner_id: string;
   created_at: string;
 }
 
 export interface TeamMember {
-  id: string;
   user_id: string;
   name: string;
   email: string;

@@ -24,7 +24,7 @@ export default function RegisterPage() {
 
   async function onSubmit(values: RegisterValues) {
     try {
-      await registerUser(values.name, values.email, values.password);
+      await registerUser(values.name, values.email, values.password, values.password_confirmation);
       toast.success("Account created — check your email to verify your address.");
       router.push("/dashboard");
     } catch (error) {

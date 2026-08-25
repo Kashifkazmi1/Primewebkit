@@ -137,7 +137,7 @@ export default function TeamPage() {
           </TableHeader>
           <TableBody>
             {members.map((member) => (
-              <TableRow key={member.id}>
+              <TableRow key={member.user_id}>
                 <TableCell>
                   <div className="flex items-center gap-3">
                     <Avatar>

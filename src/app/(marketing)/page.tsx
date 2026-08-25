@@ -5,6 +5,7 @@ import { FaqSection } from "@/components/marketing/faq-section";
 import { FeaturesGrid } from "@/components/marketing/features-grid";
 import { Hero } from "@/components/marketing/hero";
 import { IntegrationsSection } from "@/components/marketing/integrations-section";
+import { LeadCaptureHighlight } from "@/components/marketing/lead-capture-highlight";
 import { LogosMarquee } from "@/components/marketing/logos-marquee";
 import { PricingPreview } from "@/components/marketing/pricing-preview";
 import { Testimonials } from "@/components/marketing/testimonials";
@@ -30,6 +31,7 @@ export default function HomePage() {
       <DashboardPreviewSection />
       <IntegrationsSection />
       <Testimonials />
+      <LeadCaptureHighlight />
       <PricingPreview />
       <FaqSection />
       <CtaSection />

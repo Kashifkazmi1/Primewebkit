@@ -13,7 +13,8 @@ export function CtaSection() {
             Your chatbot could be live in the next ten minutes
           </h2>
           <p className="relative mx-auto mt-4 max-w-xl text-primary-foreground/85">
-            No credit card required. Crawl your site, customize the greeting, and embed a single script tag.
+            Start for free — no credit card required, first month free. Train your agent, start capturing leads, and
+            only pay once you&apos;re ready to.
           </p>
           <div className="relative mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <Button asChild size="lg" variant="secondary" className="bg-white text-primary hover:bg-white/90">

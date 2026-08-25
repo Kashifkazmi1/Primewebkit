@@ -15,26 +15,28 @@ import type {
   Subscription,
   Team,
   TeamMember,
+  UpdateWidgetInput,
   UsageSummary,
   User,
   Webhook,
   WebhookEvent,
   WebhookLog,
   WebhookWithSecret,
+  Widget,
 } from "./types";
 
 export const authApi = {
-  register: (data: { name: string; email: string; password: string }) =>
+  register: (data: { name: string; email: string; password: string; password_confirmation: string }) =>
     apiFetch<AuthPayload>("/auth/register", { method: "POST", body: data, skipAuth: true }),
   login: (data: { email: string; password: string }) =>
     apiFetch<AuthPayload>("/auth/login", { method: "POST", body: data, skipAuth: true }),
   google: (credential: string) =>
-    apiFetch<AuthPayload>("/auth/google", { method: "POST", body: { credential }, skipAuth: true }),
+    apiFetch<AuthPayload>("/auth/google", { method: "POST", body: { id_token: credential }, skipAuth: true }),
   logout: (refreshToken: string) => apiFetch<null>("/auth/logout", { method: "POST", body: { refresh_token: refreshToken } }),
   logoutAll: () => apiFetch<null>("/auth/logout-all", { method: "POST" }),
   forgotPassword: (email: string) =>
     apiFetch<null>("/auth/forgot-password", { method: "POST", body: { email }, skipAuth: true }),
-  resetPassword: (data: { token: string; password: string }) =>
+  resetPassword: (data: { token: string; password: string; password_confirmation: string }) =>
     apiFetch<null>("/auth/reset-password", { method: "POST", body: data, skipAuth: true }),
   resendVerification: (email: string) =>
     apiFetch<null>("/auth/resend-verification", { method: "POST", body: { email }, skipAuth: true }),
@@ -57,19 +59,19 @@ export const botsApi = {
   reembed: (uuid: string) => apiFetch<null>(`/bots/${uuid}/reembed`, { method: "POST" }),
 
   knowledgeSources: (uuid: string) => apiFetch<KnowledgeSource[]>(`/bots/${uuid}/knowledge-sources`),
-  addText: (uuid: string, data: { title: string; content: string }) =>
+  addText: (uuid: string, data: { source_name: string; content: string }) =>
     apiFetch<KnowledgeSource>(`/bots/${uuid}/knowledge-sources/text`, { method: "POST", body: data }),
   addQa: (uuid: string, data: { question: string; answer: string }) =>
     apiFetch<KnowledgeSource>(`/bots/${uuid}/knowledge-sources/qa`, { method: "POST", body: data }),
-  addWebsite: (uuid: string, data: { url: string }) =>
+  addWebsite: (uuid: string, data: { start_url: string; max_pages?: number }) =>
     apiFetch<KnowledgeSource>(`/bots/${uuid}/knowledge-sources/website`, { method: "POST", body: data }),
   removeKnowledgeSource: (uuid: string, sourceUuid: string) =>
     apiFetch<null>(`/bots/${uuid}/knowledge-sources/${sourceUuid}`, { method: "DELETE" }),
 
-  widget: (uuid: string) => apiFetch<Record<string, unknown>>(`/bots/${uuid}/widget`),
-  updateWidget: (uuid: string, data: Record<string, unknown>) =>
-    apiFetch<Record<string, unknown>>(`/bots/${uuid}/widget`, { method: "PUT", body: data }),
-  embedScript: (uuid: string) => apiFetch<{ script: string }>(`/bots/${uuid}/widget/embed-script`),
+  widget: (uuid: string) => apiFetch<Widget>(`/bots/${uuid}/widget`),
+  updateWidget: (uuid: string, data: UpdateWidgetInput) =>
+    apiFetch<Widget>(`/bots/${uuid}/widget`, { method: "PUT", body: data }),
+  embedScript: (uuid: string) => apiFetch<{ snippet: string }>(`/bots/${uuid}/widget/embed-script`),
 
   conversations: (uuid: string, page = 1, perPage = 20) =>
     apiFetchPaginated<Conversation[]>(`/bots/${uuid}/conversations`, { query: { page, per_page: perPage } }),
@@ -78,7 +80,8 @@ export const botsApi = {
   closeConversation: (uuid: string, conversationUuid: string) =>
     apiFetch<null>(`/bots/${uuid}/conversations/${conversationUuid}/close`, { method: "POST" }),
 
-  leads: (uuid: string) => apiFetch<Lead[]>(`/bots/${uuid}/leads`),
+  leads: (uuid: string, page = 1, perPage = 20) =>
+    apiFetchPaginated<Lead[]>(`/bots/${uuid}/leads`, { query: { page, per_page: perPage } }),
   usageSummary: (uuid: string) => apiFetch<UsageSummary>(`/bots/${uuid}/usage/summary`),
   analytics: (uuid: string) => apiFetch<Record<string, unknown>>(`/bots/${uuid}/analytics`),
 };
@@ -104,10 +107,12 @@ export const apiKeysApi = {
 
 export const subscriptionsApi = {
   plans: () => apiFetch<Plan[]>("/subscriptions/plans"),
-  current: () => apiFetch<Subscription | null>("/subscriptions/current"),
+  current: () =>
+    apiFetch<{ subscription: Subscription | null; limits_and_usage: Record<string, unknown> }>("/subscriptions/current"),
   history: () => apiFetch<Subscription[]>("/subscriptions/history"),
-  subscribe: (planUuid: string) => apiFetch<Subscription>("/subscriptions", { method: "POST", body: { plan_id: planUuid } }),
-  cancel: (uuid: string) => apiFetch<null>(`/subscriptions/${uuid}/cancel`, { method: "POST" }),
+  subscribe: (planUuid: string, billingCycle: "monthly" | "yearly" = "monthly") =>
+    apiFetch<Subscription>("/subscriptions", { method: "POST", body: { plan_id: planUuid, billing_cycle: billingCycle } }),
+  cancel: (uuid: string) => apiFetch<Subscription>(`/subscriptions/${uuid}/cancel`, { method: "POST" }),
   invoices: () => apiFetch<Invoice[]>("/subscriptions/invoices"),
 };
 

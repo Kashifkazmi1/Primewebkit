@@ -7,6 +7,7 @@ import { ArrowLeft } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FeatureGate } from "@/components/billing/feature-gate";
 import { BotConversationsTab } from "@/components/bots/bot-conversations-tab";
 import { BotKnowledgeTab } from "@/components/bots/bot-knowledge-tab";
 import { BotLeadsTab } from "@/components/bots/bot-leads-tab";
@@ -76,10 +77,14 @@ function BotDetailContent() {
           <BotWidgetTab botUuid={uuid} />
         </TabsContent>
         <TabsContent value="conversations">
-          <BotConversationsTab botUuid={uuid} />
+          <FeatureGate feature="conversation_history">
+            <BotConversationsTab botUuid={uuid} />
+          </FeatureGate>
         </TabsContent>
         <TabsContent value="leads">
-          <BotLeadsTab botUuid={uuid} />
+          <FeatureGate feature="lead_capture">
+            <BotLeadsTab botUuid={uuid} botName={bot?.name ?? "bot"} />
+          </FeatureGate>
         </TabsContent>
       </Tabs>
     </div>

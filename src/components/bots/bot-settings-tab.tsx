@@ -6,11 +6,19 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { FieldError, Input, Label, Textarea } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { ApiError } from "@/lib/api/client";
 import { botsApi } from "@/lib/api/endpoints";
-import type { Bot } from "@/lib/api/types";
+import type { Bot, LeadCaptureField } from "@/lib/api/types";
+
+const LEAD_CAPTURE_FIELDS: { value: LeadCaptureField; label: string }[] = [
+  { value: "name", label: "Name" },
+  { value: "email", label: "Email" },
+  { value: "phone", label: "Phone" },
+];
 
 const schema = z.object({
   name: z.string().min(2).max(150),
@@ -20,6 +28,9 @@ const schema = z.object({
   primary_color: z.string().max(20).optional().or(z.literal("")),
   tone: z.string().max(50).optional().or(z.literal("")),
   status: z.enum(["draft", "training", "active", "archived"]),
+  lead_capture_enabled: z.boolean(),
+  lead_capture_fields: z.array(z.enum(["name", "email", "phone"])),
+  lead_capture_prompt: z.string().max(500).optional().or(z.literal("")),
 });
 type Values = z.infer<typeof schema>;
 
@@ -40,8 +51,21 @@ export function BotSettingsTab({ bot, onUpdated }: { bot: Bot; onUpdated: (bot: 
       primary_color: bot.primary_color ?? "#6366f1",
       tone: bot.tone ?? "friendly",
       status: bot.status,
+      lead_capture_enabled: bot.lead_capture_enabled ?? true,
+      lead_capture_fields: bot.lead_capture_fields ?? ["name", "email"],
+      lead_capture_prompt: bot.lead_capture_prompt ?? "",
     },
   });
+
+  const leadCaptureEnabled = watch("lead_capture_enabled");
+  const leadCaptureFields = watch("lead_capture_fields");
+  const leadCapturePrompt = watch("lead_capture_prompt") ?? "";
+
+  function toggleLeadCaptureField(field: LeadCaptureField, checked: boolean) {
+    const current = leadCaptureFields ?? [];
+    const next = checked ? [...current, field] : current.filter((f) => f !== field);
+    setValue("lead_capture_fields", next, { shouldDirty: true });
+  }
 
   async function onSubmit(values: Values) {
     try {
@@ -115,6 +139,55 @@ export function BotSettingsTab({ bot, onUpdated }: { bot: Bot; onUpdated: (bot: 
                 <Input {...register("primary_color")} />
               </div>
             </div>
+          </div>
+          <div className="rounded-2xl border border-border bg-surface-2 p-5">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="font-display text-sm font-semibold">Lead capture</p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  When on, the chatbot asks visitors for these details during the conversation and saves them to
+                  Leads automatically.
+                </p>
+              </div>
+              <Switch
+                checked={leadCaptureEnabled}
+                onCheckedChange={(checked) => setValue("lead_capture_enabled", checked, { shouldDirty: true })}
+                aria-label="Enable lead capture"
+              />
+            </div>
+
+            {leadCaptureEnabled && (
+              <div className="mt-5 space-y-5 border-t border-border pt-5">
+                <div className="space-y-2">
+                  <Label>Details to collect</Label>
+                  <div className="flex flex-wrap gap-4">
+                    {LEAD_CAPTURE_FIELDS.map((field) => (
+                      <label key={field.value} className="flex items-center gap-2 text-sm">
+                        <Checkbox
+                          checked={leadCaptureFields?.includes(field.value)}
+                          onCheckedChange={(checked) => toggleLeadCaptureField(field.value, checked === true)}
+                        />
+                        {field.label}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="lead_capture_prompt">Capture instructions</Label>
+                  <Textarea
+                    id="lead_capture_prompt"
+                    rows={3}
+                    maxLength={500}
+                    placeholder="Ask for the visitor's email before sharing pricing details."
+                    {...register("lead_capture_prompt")}
+                  />
+                  <div className="flex items-center justify-between">
+                    <FieldError message={errors.lead_capture_prompt?.message} />
+                    <p className="text-xs text-muted-foreground">{leadCapturePrompt.length}/500</p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
           <div className="flex justify-end">
             <Button type="submit" isLoading={isSubmitting} disabled={!isDirty}>

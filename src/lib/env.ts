@@ -5,12 +5,17 @@ function required(name: string, value: string | undefined, fallback?: string): s
 }
 
 // The backend (this repo's PHP API) is deployed on its own subdomain,
-// api.primewebkit.com, separate from this frontend at primewebkit.com —
+// api.primewebkit.com, separate from this frontend at chat.primewebkit.com —
 // two origins, talking cross-origin via CORS (see backend CORS_ALLOWED_ORIGINS).
+const apiUrl = required("NEXT_PUBLIC_API_URL", process.env.NEXT_PUBLIC_API_URL, "https://api.primewebkit.com/api/v1");
+
 export const env = {
-  apiUrl: required("NEXT_PUBLIC_API_URL", process.env.NEXT_PUBLIC_API_URL, "https://api.primewebkit.com/api/v1"),
-  siteUrl: required("NEXT_PUBLIC_SITE_URL", process.env.NEXT_PUBLIC_SITE_URL, "https://primewebkit.com"),
-  widgetUrl: required("NEXT_PUBLIC_WIDGET_URL", process.env.NEXT_PUBLIC_WIDGET_URL, "https://api.primewebkit.com/widget.js"),
+  apiUrl,
+  siteUrl: required("NEXT_PUBLIC_SITE_URL", process.env.NEXT_PUBLIC_SITE_URL, "https://chat.primewebkit.com"),
+  // public/widget.js is a real static file served from the API's own
+  // origin (same host as apiUrl, one level up from /api/v1) — the
+  // self-contained embeddable chat bubble script.
+  widgetJsUrl: apiUrl.replace(/\/api\/v\d+\/?$/, "") + "/widget.js",
   // Same default as the backend's config/google.php — a public OAuth
   // client id, not a secret. Overridable via env var per environment.
   googleClientId: required(
@@ -18,4 +23,17 @@ export const env = {
     process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
     "1044212666179-nmo21qhhgr7hc4n8sdm34ccsgs5sdo84.apps.googleusercontent.com",
   ),
+  // External checkout page — this app never collects payment details
+  // itself, every upgrade CTA links out to this URL (pay.primewebkit.com,
+  // a WordPress + WooCommerce + WooCommerce Subscriptions + Stripe site).
+  // ?plan=<slug>&cycle=<monthly|yearly>&email=<email> tell its
+  // checkout-redirect page which product to add to the cart and how to
+  // pre-fill the checkout email.
+  upgradeUrl: required(
+    "NEXT_PUBLIC_UPGRADE_BASIC_URL",
+    process.env.NEXT_PUBLIC_UPGRADE_BASIC_URL,
+    "https://pay.primewebkit.com/checkout-redirect/",
+  ),
+  // The bot embedded as a live chat widget on this marketing site itself.
+  widgetBotId: required("NEXT_PUBLIC_WIDGET_BOT_ID", process.env.NEXT_PUBLIC_WIDGET_BOT_ID, "216ce59b-69d8-4e71-9cf9-85137bf3ace2"),
 };

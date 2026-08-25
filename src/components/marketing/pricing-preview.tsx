@@ -2,6 +2,7 @@ import { Check } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/marketing/reveal";
+import { UpgradeButton } from "@/components/marketing/upgrade-button";
 import { pricingPlans } from "@/lib/content/pricing";
 import { cn } from "@/lib/utils";
 
@@ -16,7 +17,7 @@ export function PricingPreview() {
         <p className="mt-4 text-muted-foreground">Start free. Upgrade when you need more volume or white-label branding.</p>
       </Reveal>
 
-      <div className="mt-14 grid gap-6 sm:grid-cols-3">
+      <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {pricingPlans.map((plan, index) => (
           <Reveal key={plan.name} delay={index * 0.08}>
             <div
@@ -43,18 +44,24 @@ export function PricingPreview() {
                   </li>
                 ))}
               </ul>
-              <Button asChild className="mt-6" variant={plan.highlighted ? "primary" : "outline"}>
-                <Link href="/register">{plan.cta}</Link>
-              </Button>
+              {plan.price === 0 ? (
+                <Button asChild className="mt-6" variant={plan.highlighted ? "primary" : "outline"}>
+                  <Link href="/register">{plan.cta}</Link>
+                </Button>
+              ) : (
+                <UpgradeButton className="mt-6 w-full" variant={plan.highlighted ? "primary" : "outline"} plan={plan.slug}>
+                  {plan.cta}
+                </UpgradeButton>
+              )}
             </div>
           </Reveal>
         ))}
       </div>
 
       <p className="mt-8 text-center text-sm text-muted-foreground">
-        Need something bigger?{" "}
+        Have questions about a plan?{" "}
         <Link href="/contact" className="font-medium text-primary hover:underline">
-          Talk to us about Enterprise
+          Talk to us
         </Link>
         .
       </p>
