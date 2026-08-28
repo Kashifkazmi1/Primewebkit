@@ -12,7 +12,8 @@ tag (floating widget) or a full-page chat interface at /chat?id={botId}.
 
 - Free: $0/mo — Try PrimeWebKit with no commitment. Includes: 1 chatbot, 100 messages / month, 1 knowledge source, Community support.
 - Starter: $29/mo — For small teams launching their first bot. Includes: 3 chatbots, 2,000 messages / month, Unlimited knowledge sources, Lead capture & webhooks, Email support.
-- Growth: $99/mo — For teams scaling support across products. Includes: 10 chatbots, 10,000 messages / month, Team roles & permissions, White-label branding, Priority support.
+- Pro: $59/mo — For growing teams that need the full toolkit. Includes: 10 chatbots, 10,000 messages / month, API access & analytics, White-label branding, Custom domain, Priority support.
+- Enterprise: $199/mo — For large teams with high-volume support. Includes: Unlimited chatbots, Unlimited messages, API access & analytics, White-label branding, Custom domain, Priority support.
 
 ## Core API (all versioned under /api/v1, JSON envelope: {status, success, message, data, errors, pagination})
 
@@ -61,9 +62,35 @@ A: Yes — invite teammates with owner, manager, or member roles to collaborate 
 
 ## Blog
 
-- Why retrieval-augmented chatbots reduce support tickets more than scripted ones (2026-06-02): Scripted decision-tree bots break the moment a customer phrases a question differently. Here's why grounding answers in your actual content changes that. — https://primewebkit.com/blog/reduce-support-tickets-with-rag-chatbots
-- Capturing leads from chat without turning the conversation into a form (2026-05-14): The best-converting chatbots ask for contact details after they've already been useful, not before. — https://primewebkit.com/blog/chatbot-lead-capture-without-annoying-visitors
-- Webhooks vs. polling: how to actually wire up chatbot events (2026-04-22): If your integration checks the API every few minutes for new leads, you're doing more work for a worse result. Here's the alternative. — https://primewebkit.com/blog/webhooks-vs-polling-for-chatbot-integrations
+- Why retrieval-augmented chatbots reduce support tickets more than scripted ones (2026-06-02): Scripted decision-tree bots break the moment a customer phrases a question differently. Here's why grounding answers in your actual content changes that. — https://chat.primewebkit.com/blog/reduce-support-tickets-with-rag-chatbots
+- Capturing leads from chat without turning the conversation into a form (2026-05-14): The best-converting chatbots ask for contact details after they've already been useful, not before. — https://chat.primewebkit.com/blog/chatbot-lead-capture-without-annoying-visitors
+- Webhooks vs. polling: how to actually wire up chatbot events (2026-04-22): If your integration checks the API every few minutes for new leads, you're doing more work for a worse result. Here's the alternative. — https://chat.primewebkit.com/blog/webhooks-vs-polling-for-chatbot-integrations
+- What actually belongs in your chatbot's knowledge base (and what doesn't) (2026-07-08): More content isn't automatically better. A knowledge base full of noise retrieves noise — here's how to decide what to feed it. — https://chat.primewebkit.com/blog/what-to-put-in-your-chatbots-knowledge-base
+- A practical checklist for embedding a chatbot without breaking your site (2026-07-29): The install itself is one script tag. Here's everything worth checking before you call it done. — https://chat.primewebkit.com/blog/embed-checklist-before-going-live
+- How much does a chatbot cost? A realistic breakdown (2026-03-04): The subscription price is only part of the answer. Here's what actually determines what you'll pay. — https://chat.primewebkit.com/blog/how-much-does-a-chatbot-cost
+- Free vs. paid chatbot: what actually changes (2026-03-18): A free plan should be enough to genuinely evaluate the product. Here's where the real differences start. — https://chat.primewebkit.com/blog/free-vs-paid-chatbot-differences
+- Adding a chatbot to a small business website: a practical guide (2026-02-19): You don't need a developer, a big budget, or months of setup. Here's the realistic path. — https://chat.primewebkit.com/blog/chatbot-for-small-business-website
+- AI chatbot for home remodeling and contractors (2026-02-26): Remodeling leads are won or lost in the hours after someone finds your site. Here's how a chatbot closes that gap. — https://chat.primewebkit.com/blog/ai-chatbot-for-home-remodeling-contractors
+- AI chatbot for doctors and medical practices (2026-03-11): Patients ask the same handful of questions constantly. A chatbot handles the ones that don't require clinical judgment. — https://chat.primewebkit.com/blog/ai-chatbot-for-doctors-medical-practices
+- Using a chatbot for online appointment booking (2026-04-01): A chatbot doesn't need to run your calendar to meaningfully speed up booking. Here's the pattern that works. — https://chat.primewebkit.com/blog/chatbot-for-online-appointment-booking
+- AI chatbot for real estate agents and agencies (2026-04-15): Property questions come in at all hours, from people who are ready to move fast. Speed is the whole game. — https://chat.primewebkit.com/blog/ai-chatbot-for-real-estate-agents
+- AI chatbot for restaurants (2026-04-29): Hours, menu questions, reservations, allergens — the questions are predictable. Let the bot handle them. — https://chat.primewebkit.com/blog/ai-chatbot-for-restaurants
+- AI chatbot for law firms (2026-05-06): A chatbot for a law firm has one job above all others: qualify and capture, never advise. — https://chat.primewebkit.com/blog/ai-chatbot-for-law-firms
+- AI chatbot for ecommerce stores (2026-05-20): Pre-purchase questions are where sales are won or abandoned. Answer them instantly instead of losing the tab. — https://chat.primewebkit.com/blog/ai-chatbot-for-ecommerce-stores
+- AI chatbot for dentists and dental practices (2026-06-10): New patient questions are almost always the same ones. Handle them without tying up the front desk. — https://chat.primewebkit.com/blog/ai-chatbot-for-dentists
+- AI chatbot for gyms and fitness studios (2026-06-24): Membership questions, class schedules, trial offers — a chatbot handles the front desk's most repeated conversation. — https://chat.primewebkit.com/blog/ai-chatbot-for-gyms-fitness-studios
+- AI chatbot for businesses in London (2026-01-14): London's service market is dense and competitive — the business that answers first usually wins the enquiry. — https://chat.primewebkit.com/blog/chatbot-for-business-in-london
+- AI chatbot for businesses in Manchester (2026-01-21): Manchester's fast-growing digital and creative sector expects the same speed from every business it deals with. — https://chat.primewebkit.com/blog/chatbot-for-business-in-manchester
+- AI chatbot for businesses in Birmingham (2026-01-28): Birmingham's trades and manufacturing-heavy business base has some of the most repetitive, chatbot-friendly questions anywhere. — https://chat.primewebkit.com/blog/chatbot-for-business-in-birmingham
+- AI chatbot for businesses in Glasgow (2026-02-04): Scotland's largest city has its own market dynamics, and a chatbot trained specifically on them outperforms a generic UK-wide script. — https://chat.primewebkit.com/blog/chatbot-for-business-in-glasgow
+- AI chatbot for businesses in Leeds (2026-02-11): Leeds' financial and legal services sector has some of the most detail-sensitive customer questions in the country. — https://chat.primewebkit.com/blog/chatbot-for-business-in-leeds
+- AI chatbot for businesses in Edinburgh (2026-02-18): Edinburgh's tourism-driven demand swings sharply through the year — a chatbot handles the volume without extra seasonal hiring. — https://chat.primewebkit.com/blog/chatbot-for-business-in-edinburgh
+- AI chatbot for businesses in New York (2026-02-25): New York runs on speed and volume. A chatbot is one of the few ways a small business matches both. — https://chat.primewebkit.com/blog/chatbot-for-business-in-new-york
+- AI chatbot for businesses in Los Angeles (2026-03-04): LA's sprawl means "nearby" means something different in every neighbourhood. A chatbot handles that nuance well. — https://chat.primewebkit.com/blog/chatbot-for-business-in-los-angeles
+- AI chatbot for businesses in Chicago (2026-03-11): Chicago's weather drives seasonal demand spikes that a chatbot handles without seasonal hiring. — https://chat.primewebkit.com/blog/chatbot-for-business-in-chicago
+- AI chatbot for businesses in Miami (2026-03-18): Miami's bilingual customer base and tourism-driven economy both favour a chatbot that's always available. — https://chat.primewebkit.com/blog/chatbot-for-business-in-miami
+- AI chatbot for businesses in Austin (2026-03-25): Austin's rapid growth means more new residents comparing local businesses with no prior loyalty to any of them. — https://chat.primewebkit.com/blog/chatbot-for-business-in-austin
+- AI chatbot for businesses in Seattle (2026-04-08): Seattle's tech-savvy customer base expects a digital-first experience — and its weather drives a lot of that research indoors. — https://chat.primewebkit.com/blog/chatbot-for-business-in-seattle
 
 ## Security
 
@@ -71,7 +98,7 @@ JWT authentication with account lockout after repeated failed logins, parameteri
 throughout, SSRF protection (with redirect-hop re-validation) on website crawling and
 outgoing webhooks, rate limiting with a stricter cost-aware limit on AI-generating
 endpoints, prompt-injection screening on retrieved knowledge-base content, and CORS with
-credentialed responses only for explicit origin matches. Full detail: https://primewebkit.com/security.
+credentialed responses only for explicit origin matches. Full detail: https://chat.primewebkit.com/security.
 
 ## Contact
 

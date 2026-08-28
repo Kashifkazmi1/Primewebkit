@@ -134,4 +134,4 @@ Disallow: /reset-password
 Disallow: /verify-email
 Disallow: /chat
 
-Sitemap: https://primewebkit.com/sitemap.xml
+Sitemap: https://chat.primewebkit.com/sitemap.xml
